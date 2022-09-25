@@ -34,31 +34,51 @@ class BottomNavyBar extends StatefulWidget {
 class BottomNavyBarState extends State<BottomNavyBar> {
 
   int selectedIndex = 1;
+  late Widget _showPage;
 
   List<NavigationItem> items = [
-    NavigationItem(const Icon(Icons.emoji_events_rounded), const Text('Conquistas')),
-    NavigationItem(const Icon(Icons.home_rounded), const Text('Início')),
-    NavigationItem(const Icon(Icons.leaderboard_rounded), const Text('Classificação')),
+    NavigationItem(const Icon(Icons.emoji_events_outlined), const Text('Conquistas', style: TextStyle(fontWeight: FontWeight.bold),)),
+    NavigationItem(const Icon(Icons.school_outlined), const Text('Prática', style: TextStyle(fontWeight: FontWeight.bold),)),
+    NavigationItem(const Icon(Icons.leaderboard_outlined), const Text('Divisão', style: TextStyle(fontWeight: FontWeight.bold),)),
   ];
 
   Widget _buildItem(NavigationItem item, bool isSelected){
-    return Container(
+    return AnimatedContainer(
       height: 50,
-      width: isSelected ? 125 : 50,
+      width: isSelected ? 135 : 50,
+      padding: isSelected ?
+      const EdgeInsets.only(left: 1, right: 2) : null,
       decoration: isSelected ? const BoxDecoration(
-        color: Color.fromARGB(255, 133, 145, 255),
+        color: Color.fromARGB(255, 133, 182, 255),
         borderRadius: BorderRadius.all(Radius.circular(30))
       ) : null,
-      child: Row(
-        children: <Widget>[
-          IconTheme(
-            data: const IconThemeData(
-              size: 26,
-            ),
-            child: item.icon,
-          ), Padding(
-            padding: const EdgeInsets.only(left: 3),
-            child: isSelected ? item.title : Container(),
+      duration: const Duration(milliseconds: 300),
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        children: [
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                    IconTheme(
+                      data: const IconThemeData(
+                        color: Colors.black,
+                        size: 30,
+                      ),
+                      child: item.icon,
+                    ), Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: isSelected ? DefaultTextStyle(style: const TextStyle(color: Color.fromARGB(
+                          255, 235, 245, 255)), child: item.title) : Container(),
+                    )
+                  ],),
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -69,7 +89,7 @@ class BottomNavyBarState extends State<BottomNavyBar> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      height: 56,
+      height: 60,
       padding: const EdgeInsets.only(top: 4, right: 30, bottom: 4, left: 30),
       width: MediaQuery.of(context).size.width,
       child: Row(
@@ -80,6 +100,7 @@ class BottomNavyBarState extends State<BottomNavyBar> {
             onTap: (){
               setState(() {
                 selectedIndex = itemIndex;
+                _showPage = _choosePage(itemIndex);
               });
             },
             child: _buildItem(item, selectedIndex == itemIndex),
@@ -95,4 +116,17 @@ class NavigationItem {
   final Text title;
 
   NavigationItem(this.icon, this.title);
+}
+
+Widget _choosePage(int index){
+  switch (index) {
+    case 0:
+      return Container(color: Colors.blueAccent,);
+
+    case 1:
+      return Container(color: Colors.redAccent,);
+
+    case 2:
+      return Container(color: Colors.yellow,);
+  }
 }
