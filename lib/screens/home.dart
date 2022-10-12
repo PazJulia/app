@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'formacao.dart';
+
 class Home extends StatefulWidget {
   const Home({super.key});
 
@@ -10,16 +12,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   int _selectedIndex = 1;
   static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+      TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
     Text(
       'Index 0: Home',
       style: optionStyle,
     ),
-    Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
+    FormacaoCards(),
     Text(
       'Index 2: School',
       style: optionStyle,
