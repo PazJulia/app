@@ -1,4 +1,6 @@
+import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'formacao.dart';
 
@@ -39,6 +41,9 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         shadowColor: const Color.fromARGB(4, 0, 0, 0),
         title: const Text('Teste', style: TextStyle(color: Colors.black)),
+        systemOverlayStyle: const SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: Colors.white),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -63,8 +68,8 @@ class _HomeState extends State<Home> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: const Color.fromARGB(255, 133, 145, 255),
-        unselectedItemColor: Colors.black,
+        selectedItemColor: Colors.black,
+        unselectedItemColor: Colors.grey,
         onTap: _onItemTapped,
       ),
     );

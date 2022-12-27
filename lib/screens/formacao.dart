@@ -1,6 +1,8 @@
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 
+import 'explicacao.dart';
+
 class FormacaoCards extends StatelessWidget {
   const FormacaoCards({super.key});
 
@@ -34,12 +36,13 @@ class FormacaoCards extends StatelessWidget {
                     padding: const EdgeInsets.all(8),
                     child: ElevatedButton(
                       style: style,
-                      onPressed: () {},
                       child: Padding(
                         padding: const EdgeInsets.only(top: 13, bottom: 13),
                         child: Text('Teste 1',
                             style: TextStyle(color: secondaryColor)),
-                      ),
+                      ),onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => Explicacao() ));
+                    },
                     ),
                   ),
                 ]),
