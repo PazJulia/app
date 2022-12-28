@@ -21,7 +21,7 @@ class FormacaoCards extends StatelessWidget {
           padding: const EdgeInsets.only(top: 10),
           child: Card(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(15.0),
+              borderRadius: BorderRadius.circular(30),
             ),
             shadowColor: const Color.fromARGB(10, 0, 0, 0),
             color: const Color.fromARGB(255, 195, 219, 255),
