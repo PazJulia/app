@@ -49,6 +49,7 @@ class _HomeState extends State<Home> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         elevation: 1,
+        iconSize: 28,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.emoji_events_sharp),

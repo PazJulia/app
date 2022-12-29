@@ -1,7 +1,9 @@
-import 'package:app/screens/explicacao-slides.dart';
+import 'package:app/components/explicacao-slides.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+
+import '../components/stars-rating.dart';
 
 class Explicacao extends StatelessWidget {
   const Explicacao({super.key});
@@ -26,22 +28,7 @@ class Explicacao extends StatelessWidget {
               "Título da explicação",
               style: TextStyle(color: primaryColor),
             ),
-            Row(
-              children: [
-                Icon(
-                  Icons.star_rate_rounded,
-                  color: Colors.yellow,
-                ),
-                Icon(
-                  Icons.star_rate_rounded,
-                  color: Colors.yellow,
-                ),
-                Icon(
-                  Icons.star_rate_rounded,
-                  color: Colors.yellow,
-                ),
-              ],
-            )
+            const StarsRating(),
           ],
         ),
         actions: [
@@ -57,7 +44,7 @@ class Explicacao extends StatelessWidget {
           )
         ],
       ),
-      body: ExplicacaoSlides(),
+      body: const ExplicacaoSlides(),
     );
   }
 }

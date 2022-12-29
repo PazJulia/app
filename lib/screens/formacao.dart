@@ -1,18 +1,12 @@
-import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 
-import 'explicacao.dart';
+import '../components/lessons-timeline.dart';
 
 class FormacaoCards extends StatelessWidget {
   const FormacaoCards({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        backgroundColor: primaryColor,
-        shadowColor: const Color.fromARGB(10, 0, 0, 0));
-
     return ListView(
       padding: const EdgeInsets.only(top: 0, right: 10, bottom: 10, left: 10),
       reverse: true,
@@ -30,22 +24,15 @@ class FormacaoCards extends StatelessWidget {
             child: Column(children: [
               SizedBox(
                 width: double.infinity,
-                child:
-                    Column(verticalDirection: VerticalDirection.up, children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8),
-                    child: ElevatedButton(
-                      style: style,
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 13, bottom: 13),
-                        child: Text('Teste 1',
-                            style: TextStyle(color: secondaryColor)),
-                      ),onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => Explicacao() ));
-                    },
+                child: Column(
+                  verticalDirection: VerticalDirection.up,
+                  children: const [
+                    Padding(
+                      padding: EdgeInsets.all(8),
+                      child: LessonsTimeline(),
                     ),
-                  ),
-                ]),
+                  ],
+                ),
               ),
               Container(
                 width: double.infinity,

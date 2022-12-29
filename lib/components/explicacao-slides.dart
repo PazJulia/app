@@ -60,13 +60,6 @@ class _ExplicacaoSlidesState extends State<ExplicacaoSlides> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Container(
-                    padding: EdgeInsets.all(20),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    child: const Icon(Icons.ac_unit)),
-                Container(
                   margin: EdgeInsets.only(top: 20),
                   child: Text(
                     currentSlide.title ?? '',
@@ -118,10 +111,10 @@ class _ExplicacaoSlidesState extends State<ExplicacaoSlides> {
         ),
         renderDoneBtn: Text(
           "PRATICAR",
-          style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold),
+          style: TextStyle(color: secondaryColor, fontWeight: FontWeight.bold),
         ),
         doneButtonStyle: ButtonStyle(
-          backgroundColor: MaterialStatePropertyAll<Color>(secondaryColor),
+          backgroundColor: MaterialStatePropertyAll<Color>(primaryColor),
         ),
         listCustomTabs: renderListCustomTabs(),
         scrollPhysics: const BouncingScrollPhysics(),
