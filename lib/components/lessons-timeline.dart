@@ -27,13 +27,13 @@ class LessonsTimeline extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: const [
                 Text(
                   'Título da Lição',
                   style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
-                      color: Colors.black54),
+                      color: Colors.black),
                 ),
                 StarsRating()
               ],
