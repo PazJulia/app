@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../shared/values/colors.dart';
 import 'formacao.dart';
 
 class Home extends StatefulWidget {
@@ -35,7 +36,7 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+      backgroundColor: fifthColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         shadowColor: const Color.fromARGB(4, 0, 0, 0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../components/stars-rating.dart';
 import '../shared/values/colors.dart';
@@ -13,15 +14,14 @@ class Pratica extends StatelessWidget {
         toolbarHeight: 80,
         elevation: 0,
         automaticallyImplyLeading: false,
-        backgroundColor: secondaryColor,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Barra de progresso vai aqui",
-              style: TextStyle(color: primaryColor),
-            ),
-          ],
+        backgroundColor: fifthColor,
+        title: LinearPercentIndicator(
+          lineHeight: 30,
+          percent: 0.5,
+          center: const Text("1/2", style: TextStyle(fontWeight: FontWeight.bold),),
+          barRadius: const Radius.circular(16),
+          progressColor: fourthColor,
+          backgroundColor: Colors.grey[300],
         ),
         actions: [
           IconButton(

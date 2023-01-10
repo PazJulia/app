@@ -59,7 +59,7 @@ class LessonsTimeline extends StatelessWidget {
                           builder: (context) => const Explicacao()));
                 },
                 style: ElevatedButton.styleFrom(
-                  shape: CircleBorder(),
+                  shape: const CircleBorder(),
                   backgroundColor: secondaryColor, // <-- Button color
                 ),
                 child: Icon(Icons.not_started_rounded,
