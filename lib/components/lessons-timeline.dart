@@ -10,10 +10,6 @@ class LessonsTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ButtonStyle style = ElevatedButton.styleFrom(
-        textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-        backgroundColor: primaryColor,
-        shadowColor: const Color.fromARGB(10, 0, 0, 0));
     return Column(verticalDirection: VerticalDirection.up, children: [
       const Divider(
         color: Colors.transparent,
@@ -47,11 +43,6 @@ class LessonsTimeline extends StatelessWidget {
                 color: secondaryColor,
               ),
               indicator: ElevatedButton(
-                onLongPress: () {
-                  const Tooltip(
-                    message: 'oi',
-                  );
-                },
                 onPressed: () {
                   Navigator.push(
                       context,
