@@ -1,3 +1,5 @@
+import 'package:app/components/atividade-escolha-codigo.dart';
+import 'package:app/components/atividade-escolha-comandos.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -8,6 +10,7 @@ class Pratica extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int activityType = 0;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -15,7 +18,7 @@ class Pratica extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: fifthColor,
         title: LinearPercentIndicator(
-          lineHeight: 30,
+          lineHeight: 20,
           percent: 0.5,
           center: const Text(
             "1/2",
@@ -44,8 +47,22 @@ class Pratica extends StatelessWidget {
         color: fifthColor,
         child: Column(
           children: [
-            const Expanded(
-              child: Text('HELLOOOOOOO'),
+            Expanded(
+              child: Padding(
+                padding:
+                const EdgeInsets.only(top: 20, right: 5, bottom: 15, left: 5),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    if (activityType == 0) const AtividadeEscolhaComandos()
+                    else if (activityType == 1) const AtividadeEscolhaCodigo()
+                  ],
+                ),
+              ),
             ),
             SizedBox(
               height: 50,
@@ -55,11 +72,10 @@ class Pratica extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  shape: const BeveledRectangleBorder(),
-                  backgroundColor: thirdColor,
-                  shadowColor: Colors.transparent,
-                  disabledBackgroundColor: primaryColor
-                ),
+                    shape: const BeveledRectangleBorder(),
+                    backgroundColor: thirdColor,
+                    shadowColor: Colors.transparent,
+                    disabledBackgroundColor: primaryColor),
                 child: const Text(
                   'VERIFICAR',
                   style: TextStyle(fontWeight: FontWeight.bold),
