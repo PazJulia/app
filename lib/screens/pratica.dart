@@ -49,8 +49,8 @@ class Pratica extends StatelessWidget {
           children: [
             Expanded(
               child: Padding(
-                padding:
-                const EdgeInsets.only(top: 20, right: 5, bottom: 15, left: 5),
+                padding: const EdgeInsets.only(
+                    top: 20, right: 5, bottom: 15, left: 5),
                 child: Column(
                   children: [
                     const Text(
@@ -58,8 +58,10 @@ class Pratica extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(fontWeight: FontWeight.w500),
                     ),
-                    if (activityType == 0) const AtividadeEscolhaComandos()
-                    else if (activityType == 1) const AtividadeEscolhaCodigo()
+                    if (activityType == 0)
+                      const AtividadeEscolhaComandos()
+                    else if (activityType == 1)
+                      const AtividadeEscolhaCodigo()
                   ],
                 ),
               ),
@@ -68,14 +70,13 @@ class Pratica extends StatelessWidget {
               height: 50,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+                onPressed: null,
                 style: ElevatedButton.styleFrom(
-                    shape: const BeveledRectangleBorder(),
-                    backgroundColor: thirdColor,
-                    shadowColor: Colors.transparent,
-                    disabledBackgroundColor: primaryColor),
+                  shape: const BeveledRectangleBorder(),
+                  backgroundColor: thirdColor,
+                  shadowColor: Colors.transparent,
+                  disabledBackgroundColor: primaryColor,
+                ),
                 child: const Text(
                   'VERIFICAR',
                   style: TextStyle(fontWeight: FontWeight.bold),
