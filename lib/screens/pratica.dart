@@ -10,7 +10,7 @@ class Pratica extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int activityType = 0;
+    int activityType = 1;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -26,7 +26,7 @@ class Pratica extends StatelessWidget {
           ),
           barRadius: const Radius.circular(16),
           progressColor: fourthColor,
-          backgroundColor: Colors.grey[300],
+          backgroundColor: sixthColor,
         ),
         actions: [
           IconButton(
@@ -56,7 +56,7 @@ class Pratica extends StatelessWidget {
                     const Text(
                       'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                      style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                     if (activityType == 0)
                       const AtividadeEscolhaComandos()
