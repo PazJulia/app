@@ -50,13 +50,16 @@ class Pratica extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
-                    top: 20, right: 5, bottom: 15, left: 5),
+                    top: 20, right: 5, bottom: 20, left: 5),
                 child: Column(
                   children: [
-                    const Text(
-                      'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     if (activityType == 0)
                       const AtividadeEscolhaComandos()
