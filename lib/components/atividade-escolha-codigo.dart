@@ -13,12 +13,12 @@ class AtividadeEscolhaCodigo extends StatefulWidget {
 
 class _AtividadeEscolhaCodigoState extends State<AtividadeEscolhaCodigo> {
   final codigosOriginais = ['"', '"', ' = ', '(', ')', 'string python', 'x'];
-
+  late List<bool> estadoBotoes =
+      codigosOriginais.map((codigo) => true).toList();
   var codigoResposta = [];
 
   @override
   Widget build(BuildContext context) {
-    var comando = List.from(codigosOriginais);
     return Padding(
       padding: EdgeInsets.all(10),
       child: Column(
@@ -29,7 +29,6 @@ class _AtividadeEscolhaCodigoState extends State<AtividadeEscolhaCodigo> {
             decoration: BoxDecoration(
               color: primaryColor,
               borderRadius: BorderRadius.circular(16),
-              boxShadow: 
             ),
             child: Column(
               children: [
@@ -47,8 +46,8 @@ class _AtividadeEscolhaCodigoState extends State<AtividadeEscolhaCodigo> {
                     iconSize: 30,
                     onPressed: () {
                       setState(() {
-                        comando = [];
-                        comando = List.from(codigosOriginais);
+                        estadoBotoes =
+                            codigosOriginais.map((codigo) => true).toList();
                         codigoResposta = [];
                       });
                     },
@@ -65,31 +64,39 @@ class _AtividadeEscolhaCodigoState extends State<AtividadeEscolhaCodigo> {
             padding: const EdgeInsets.only(top: 20),
             child: Wrap(
               direction: Axis.horizontal,
-              children: [
-                for (var i in comando)
-                  Padding(
+              children: List.generate(
+                codigosOriginais.length,
+                (index) {
+                  return Padding(
                     padding: const EdgeInsets.all(7),
                     child: SizedBox(
                       height: 35,
                       child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            codigoResposta.add(i);
-                            comando.remove(i);
-                          });
-                        },
+                        onPressed: (estadoBotoes[index] == false)
+                            ? null
+                            : () {
+                                setState(() {
+                                  estadoBotoes[index] = false;
+                                  codigoResposta.add(codigosOriginais[index]);
+                                });
+                              },
                         style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(secondaryColor),
+                          backgroundColor: estadoBotoes[index] == true
+                              ? MaterialStateProperty.all<Color>(secondaryColor)
+                              : MaterialStateProperty.all<Color>(fifthColor),
                         ),
                         child: Text(
-                          i,
-                          style: TextStyle(color: primaryColor),
+                          codigosOriginais[index],
+                          style: TextStyle(
+                              color: estadoBotoes[index] == true
+                                  ? primaryColor
+                                  : Colors.transparent),
                         ),
                       ),
                     ),
-                  ),
-              ],
+                  );
+                },
+              ),
             ),
           ),
         ],
