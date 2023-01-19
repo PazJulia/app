@@ -1,16 +1,25 @@
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-escolha-comandos.dart';
+import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../shared/values/colors.dart';
 
-class Pratica extends StatelessWidget {
+class Pratica extends StatefulWidget {
   const Pratica({super.key});
 
   @override
+  _PraticaState createState() => _PraticaState();
+}
+
+class _PraticaState extends State<Pratica> {
+  double porcentagemAtividadeConcluida = 0.0;
+  int totalAtividades = 2;
+
+  @override
   Widget build(BuildContext context) {
-    int activityType = 1;
+    int activityType = 0;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -19,10 +28,10 @@ class Pratica extends StatelessWidget {
         backgroundColor: fifthColor,
         title: LinearPercentIndicator(
           lineHeight: 20,
-          percent: 0.5,
-          center: const Text(
-            "1/2",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          percent: porcentagemAtividadeConcluida,
+          center: Text(
+            formatDoubleToFractionToText(totalAtividades, porcentagemAtividadeConcluida),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           barRadius: const Radius.circular(16),
           progressColor: fourthColor,
