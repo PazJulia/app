@@ -1,25 +1,23 @@
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-escolha-comandos.dart';
+import 'package:app/model/atividade-codigo.dart';
 import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../shared/values/colors.dart';
 
-class Pratica extends StatefulWidget {
+final porcentagemAtividadeConcluida = StateProvider<double>((ref) => 0.0);
+const int totalAtividades = 2;
+
+
+class Pratica extends ConsumerWidget {
   const Pratica({super.key});
 
   @override
-  _PraticaState createState() => _PraticaState();
-}
-
-class _PraticaState extends State<Pratica> {
-  double porcentagemAtividadeConcluida = 0.0;
-  int totalAtividades = 2;
-
-  @override
-  Widget build(BuildContext context) {
-    int activityType = 0;
+  Widget build(BuildContext context, WidgetRef ref) {
+    int activityType = 1;
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -28,9 +26,10 @@ class _PraticaState extends State<Pratica> {
         backgroundColor: fifthColor,
         title: LinearPercentIndicator(
           lineHeight: 20,
-          percent: porcentagemAtividadeConcluida,
+          percent: ref.watch(porcentagemAtividadeConcluida),
           center: Text(
-            formatDoubleToFractionToText(totalAtividades, porcentagemAtividadeConcluida),
+            formatDoubleToFractionToText(
+                totalAtividades, ref.watch(porcentagemAtividadeConcluida)),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           barRadius: const Radius.circular(16),
@@ -73,7 +72,7 @@ class _PraticaState extends State<Pratica> {
                     if (activityType == 0)
                       const AtividadeEscolhaComandos()
                     else if (activityType == 1)
-                      const AtividadeEscolhaCodigo()
+                      AtividadeEscolhaCodigo()
                   ],
                 ),
               ),
@@ -82,7 +81,11 @@ class _PraticaState extends State<Pratica> {
               height: 50,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: null,
+                onPressed: () {
+                  ref.read(porcentagemAtividadeConcluida.notifier).state =
+                      getPercentageOfOneFromTotal(totalAtividades) +
+                          ref.watch(porcentagemAtividadeConcluida);
+                },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
                   backgroundColor: thirdColor,

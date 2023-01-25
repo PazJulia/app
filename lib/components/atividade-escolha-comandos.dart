@@ -10,7 +10,8 @@ class AtividadeEscolhaComandos extends StatefulWidget {
 }
 
 class _AtividadeEscolhaComandosState extends State<AtividadeEscolhaComandos> {
-  var clickedButtonPosition = [false, false, false, false];
+  var buttonValues = ['a = 3', 'a = \'python\'', 'print(python)', 'a = python'];
+  late List<bool> clickedButtonPosition = buttonValues.map((value) => false).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class _AtividadeEscolhaComandosState extends State<AtividadeEscolhaComandos> {
                   : MaterialStateProperty.all<Color>(primaryColor),
             ),
             child: Text(
-              'Index: $index\nValue: ${clickedButtonPosition[index]}',
+              buttonValues[index],
               style: TextStyle(
                   color: clickedButtonPosition[index] == true
                       ? primaryColor
