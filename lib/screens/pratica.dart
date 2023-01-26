@@ -1,6 +1,5 @@
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-escolha-comandos.dart';
-import 'package:app/model/atividade-codigo.dart';
 import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,12 +7,13 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../shared/values/colors.dart';
 
-final porcentagemAtividadeConcluida = StateProvider<double>((ref) => 0.0);
-const int totalAtividades = 2;
-
+final porcentagemAtividadeConcluida =
+    StateProvider.autoDispose<double>((ref) => 0.0);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
+
+  static const int totalAtividades = 2;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -72,7 +72,8 @@ class Pratica extends ConsumerWidget {
                     if (activityType == 0)
                       const AtividadeEscolhaComandos()
                     else if (activityType == 1)
-                      AtividadeEscolhaCodigo()
+                      const AtividadeEscolhaCodigo(
+                          ['"', '"', ' = ', '(', ')', 'string python', 'x'])
                   ],
                 ),
               ),

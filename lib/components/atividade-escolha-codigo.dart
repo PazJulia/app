@@ -4,22 +4,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/atividade-codigo.dart';
 import '../shared/values/colors.dart';
 
-const codigos = ['"', '"', ' = ', '(', ')', 'string python', 'x'];
-final atividadeCodigoProvider =
-    StateNotifierProvider<AtividadeCodigoNotifier, List<AtividadeCodigo>>(
-        (ref) => AtividadeCodigoNotifier(
-            codigos: codigos
-                .map((e) => AtividadeCodigo(codigo: e, estado: true))
-                .toList()));
-final codigoResposta = StateProvider<List<String>>((ref) => []);
+final atividadeCodigoProvider = StateNotifierProvider.autoDispose<
+    AtividadeCodigoNotifier,
+    List<AtividadeCodigo>>((ref) => AtividadeCodigoNotifier());
+final codigoResposta = StateProvider.autoDispose<List<String>>((ref) => []);
+bool isCodigosProviderEmpty = true;
 
 class AtividadeEscolhaCodigo extends ConsumerWidget {
-  const AtividadeEscolhaCodigo({super.key});
+  const AtividadeEscolhaCodigo(this.codes, {super.key});
+
+  final List<String> codes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     List<AtividadeCodigo> codigosList = ref.watch(atividadeCodigoProvider);
     List<String> resposta = ref.watch(codigoResposta);
+    if (isCodigosProviderEmpty) {
+      Future(() {
+        ref.read(atividadeCodigoProvider.notifier).resetCodigos(codes);
+        isCodigosProviderEmpty = false;
+      });
+    }
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -48,7 +54,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                     onPressed: () {
                       ref
                           .read(atividadeCodigoProvider.notifier)
-                          .resetCodigos(codigos);
+                          .resetCodigos(codes);
                       ref.read(codigoResposta.notifier).state = [];
                     },
                     color: secondaryColor,
