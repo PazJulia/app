@@ -6,19 +6,20 @@ import '../shared/values/colors.dart';
 
 const codigos = ['"', '"', ' = ', '(', ')', 'string python', 'x'];
 final atividadeCodigoProvider =
-    StateNotifierProvider((ref) => AtividadeCodigoNotifier());
+    StateNotifierProvider<AtividadeCodigoNotifier, List<AtividadeCodigo>>(
+        (ref) => AtividadeCodigoNotifier(
+            codigos: codigos
+                .map((e) => AtividadeCodigo(codigo: e, estado: true))
+                .toList()));
+final codigoResposta = StateProvider<List<String>>((ref) => []);
 
 class AtividadeEscolhaCodigo extends ConsumerWidget {
-  const AtividadeEscolhaCodigo({super.key, codigos});
+  const AtividadeEscolhaCodigo({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    for (var codigo in codigos) {
-      ref
-          .read(atividadeCodigoProvider.notifier)
-          .add(AtividadeCodigo(codigo: codigo, estado: true));
-    }
-    var codigoResposta = [];
+    List<AtividadeCodigo> codigosList = ref.watch(atividadeCodigoProvider);
+    List<String> resposta = ref.watch(codigoResposta);
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -35,7 +36,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                 Expanded(
                   child: Center(
                     child: Text(
-                      codigoResposta.join(),
+                      resposta.join(),
                       style: const TextStyle(fontSize: 16),
                     ),
                   ),
@@ -45,13 +46,10 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                   child: IconButton(
                     iconSize: 30,
                     onPressed: () {
-                      ref.read(atividadeCodigoProvider.notifier).reset();
-                      for (var codigo in codigos) {
-                        ref
-                            .read(atividadeCodigoProvider.notifier)
-                            .add(AtividadeCodigo(codigo: codigo, estado: true));
-                      }
-                      codigoResposta = [];
+                      ref
+                          .read(atividadeCodigoProvider.notifier)
+                          .resetCodigos(codigos);
+                      ref.read(codigoResposta.notifier).state = [];
                     },
                     color: secondaryColor,
                     icon: const Icon(
@@ -67,45 +65,35 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
             child: Wrap(
               direction: Axis.horizontal,
               children: List.generate(
-                ref.watch(atividadeCodigoProvider.notifier).state.length,
+                codigosList.length,
                 (index) {
                   return Padding(
                     padding: const EdgeInsets.all(7),
                     child: SizedBox(
                       height: 35,
                       child: ElevatedButton(
-                        onPressed: (ref
-                                    .watch(atividadeCodigoProvider.notifier)
-                                    .state[index]
-                                    .estado ==
-                                false)
+                        onPressed: (codigosList[index].estado == false)
                             ? null
                             : () {
                                 ref
                                     .read(atividadeCodigoProvider.notifier)
-                                    .changeState(index);
+                                    .changeEstadoToFalse(index);
+
+                                resposta.add(codigosList[index].codigo);
+
+                                ref.read(codigoResposta.notifier).state = [
+                                  ...resposta
+                                ];
                               },
                         style: ButtonStyle(
-                          backgroundColor: ref
-                                      .watch(atividadeCodigoProvider.notifier)
-                                      .state[index]
-                                      .estado ==
-                                  true
+                          backgroundColor: codigosList[index].estado == true
                               ? MaterialStateProperty.all<Color>(secondaryColor)
                               : MaterialStateProperty.all<Color>(fifthColor),
                         ),
                         child: Text(
-                          ref
-                              .watch(atividadeCodigoProvider.notifier)
-                              .state[index]
-                              .codigo,
+                          codigosList[index].codigo,
                           style: TextStyle(
-                              color: ref
-                                          .watch(
-                                              atividadeCodigoProvider.notifier)
-                                          .state[index]
-                                          .estado ==
-                                      true
+                              color: codigosList[index].estado == true
                                   ? primaryColor
                                   : Colors.transparent),
                         ),
