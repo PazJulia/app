@@ -1,14 +1,15 @@
-import 'package:app/state-notifier/atividade-codigo-notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../model/atividade-codigo.dart';
+import '../screens/pratica.dart';
 import '../shared/values/colors.dart';
+import '../state-notifier/atividade-codigo-notifier.dart';
 
 final atividadeCodigoProvider = StateNotifierProvider.autoDispose<
     AtividadeCodigoNotifier,
     List<AtividadeCodigo>>((ref) => AtividadeCodigoNotifier());
-final codigoResposta = StateProvider.autoDispose<List<String>>((ref) => []);
-bool isCodigosProviderEmpty = true;
+final respostaAtividadeCodigo =
+    StateProvider.autoDispose<List<String>>((ref) => []);
 
 class AtividadeEscolhaCodigo extends ConsumerWidget {
   const AtividadeEscolhaCodigo(this.codes, {super.key});
@@ -17,15 +18,9 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     List<AtividadeCodigo> codigosList = ref.watch(atividadeCodigoProvider);
-    List<String> resposta = ref.watch(codigoResposta);
-    if (isCodigosProviderEmpty) {
-      Future(() {
-        ref.read(atividadeCodigoProvider.notifier).resetCodigos(codes);
-        isCodigosProviderEmpty = false;
-      });
-    }
+    List<String> resposta = ref.watch(respostaAtividadeCodigo);
+
     return Padding(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -55,7 +50,9 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                       ref
                           .read(atividadeCodigoProvider.notifier)
                           .resetCodigos(codes);
-                      ref.read(codigoResposta.notifier).state = [];
+                      ref.read(respostaAtividadeCodigo.notifier).state = [];
+                      ref.read(isAtividadeEmpty.notifier).state =
+                      true;
                     },
                     color: secondaryColor,
                     icon: const Icon(
@@ -87,9 +84,11 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
 
                                 resposta.add(codigosList[index].codigo);
 
-                                ref.read(codigoResposta.notifier).state = [
-                                  ...resposta
-                                ];
+                                ref
+                                    .read(respostaAtividadeCodigo.notifier)
+                                    .state = [...resposta];
+                                ref.read(isAtividadeEmpty.notifier).state =
+                                    false;
                               },
                         style: ButtonStyle(
                           backgroundColor: codigosList[index].estado == true

@@ -1,4 +1,3 @@
-import 'package:app/screens/pratica.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
@@ -119,9 +118,6 @@ class _ExplicacaoSlidesState extends State<ExplicacaoSlides> {
         ),
         listCustomTabs: renderListCustomTabs(),
         scrollPhysics: const BouncingScrollPhysics(),
-        onDonePress: () => {Navigator.push(
-        context,
-        MaterialPageRoute(
-        builder: (context) => const Pratica())) });
+        onDonePress: () => {Navigator.pushNamed(context, '/pratica') });
   }
 }

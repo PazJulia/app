@@ -10,6 +10,8 @@ import '../shared/values/colors.dart';
 final porcentagemAtividadeConcluida =
     StateProvider.autoDispose<double>((ref) => 0.0);
 
+final isAtividadeEmpty = StateProvider.autoDispose((ref) => true);
+
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
 
@@ -18,6 +20,7 @@ class Pratica extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     int activityType = 1;
+    bool activityEmpty = ref.watch(isAtividadeEmpty);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -40,7 +43,7 @@ class Pratica extends ConsumerWidget {
           IconButton(
             iconSize: 30,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             color: secondaryColor,
             icon: const Icon(
@@ -72,8 +75,9 @@ class Pratica extends ConsumerWidget {
                     if (activityType == 0)
                       const AtividadeEscolhaComandos()
                     else if (activityType == 1)
-                      const AtividadeEscolhaCodigo(
-                          ['"', '"', ' = ', '(', ')', 'string python', 'x'])
+                      initiateAtividadeEscolaCodigoWidget(
+                          ['"', '"', ' = ', '(', ')', 'string python', 'x'],
+                          ref)
                   ],
                 ),
               ),
@@ -82,11 +86,13 @@ class Pratica extends ConsumerWidget {
               height: 50,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  ref.read(porcentagemAtividadeConcluida.notifier).state =
-                      getPercentageOfOneFromTotal(totalAtividades) +
-                          ref.watch(porcentagemAtividadeConcluida);
-                },
+                onPressed: activityEmpty == true
+                    ? null
+                    : () {
+                        ref.read(porcentagemAtividadeConcluida.notifier).state =
+                            getPercentageOfOneFromTotal(totalAtividades) +
+                                ref.watch(porcentagemAtividadeConcluida);
+                      },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
                   backgroundColor: thirdColor,
@@ -103,5 +109,13 @@ class Pratica extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  initiateAtividadeEscolaCodigoWidget(List<String> list, WidgetRef ref) {
+    Future(() {
+      ref.read(atividadeCodigoProvider.notifier).resetCodigos(list);
+    });
+
+    return AtividadeEscolhaCodigo(list);
   }
 }
