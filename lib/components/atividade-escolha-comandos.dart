@@ -16,7 +16,6 @@ class AtividadeEscolhaComandos extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Atividade> comandosList = ref.watch(atividadeEscolhaComandos);
-    bool isAtividadeEmpty = ref.watch(isAtividadeEmptyNotifier);
     return Container(
       height: 300,
       padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
@@ -28,12 +27,10 @@ class AtividadeEscolhaComandos extends ConsumerWidget {
             onPressed: () {
               ref
                   .read(atividadeEscolhaComandos.notifier)
-                  .changeAllEstadosToFalse();
-              ref
-                  .read(atividadeEscolhaComandos.notifier)
-                  .changeEstado(index, true);
-
-              ref.read(isAtividadeEmptyNotifier.notifier).state = false;
+                  .resetEstadosAndSetEstadoIndex(index, true);
+              if (ref.watch(isAtividadeEmptyNotifier)) {
+                ref.read(isAtividadeEmptyNotifier.notifier).state = false;
+              }
             },
             style: ButtonStyle(
               backgroundColor: comandosList[index].estado == true
@@ -41,7 +38,8 @@ class AtividadeEscolhaComandos extends ConsumerWidget {
                   : MaterialStateProperty.all<Color>(primaryColor),
             ),
             child: Text(
-              comandosList[index].codigo,
+              //comandosList[index].codigo,
+              comandosList[index].json,
               style: TextStyle(
                   color: comandosList[index].estado == true
                       ? primaryColor
