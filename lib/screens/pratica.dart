@@ -10,7 +10,8 @@ import '../shared/values/colors.dart';
 final porcentagemAtividadeConcluida =
     StateProvider.autoDispose<double>((ref) => 0.0);
 
-final isAtividadeEmpty = StateProvider.autoDispose((ref) => true);
+final isAtividadeEmptyNotifier = StateProvider.autoDispose((ref) => true);
+final activityTypeNotifier = StateProvider.autoDispose((ref) => 0);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
@@ -19,8 +20,8 @@ class Pratica extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    int activityType = 1;
-    bool activityEmpty = ref.watch(isAtividadeEmpty);
+    bool activityEmpty = ref.watch(isAtividadeEmptyNotifier);
+    int activityType = ref.watch(activityTypeNotifier);
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -73,9 +74,14 @@ class Pratica extends ConsumerWidget {
                       ),
                     ),
                     if (activityType == 0)
-                      const AtividadeEscolhaComandos()
+                      initiateAtividadeEscolhaComandosWidget([
+                        'a = 3',
+                        'a = \'python\'',
+                        'print(python)',
+                        'a = python'
+                      ], ref)
                     else if (activityType == 1)
-                      initiateAtividadeEscolaCodigoWidget(
+                      initiateAtividadeEscolhaCodigoWidget(
                           ['"', '"', ' = ', '(', ')', 'string python', 'x'],
                           ref)
                   ],
@@ -92,6 +98,9 @@ class Pratica extends ConsumerWidget {
                         ref.read(porcentagemAtividadeConcluida.notifier).state =
                             getPercentageOfOneFromTotal(totalAtividades) +
                                 ref.watch(porcentagemAtividadeConcluida);
+                        ref.read(activityTypeNotifier.notifier).state =
+                            activityType + 1;
+                        ref.read(isAtividadeEmptyNotifier.notifier).state = true;
                       },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
@@ -111,11 +120,19 @@ class Pratica extends ConsumerWidget {
     );
   }
 
-  initiateAtividadeEscolaCodigoWidget(List<String> list, WidgetRef ref) {
+  initiateAtividadeEscolhaCodigoWidget(List<String> list, WidgetRef ref) {
     Future(() {
-      ref.read(atividadeCodigoProvider.notifier).resetCodigos(list);
+      ref.read(atividadeCodigoProvider.notifier).setCodigos(list, true);
     });
 
     return AtividadeEscolhaCodigo(list);
+  }
+
+  initiateAtividadeEscolhaComandosWidget(List<String> list, WidgetRef ref) {
+    Future(() {
+      ref.read(atividadeEscolhaComandos.notifier).setCodigos(list, false);
+    });
+
+    return const AtividadeEscolhaComandos();
   }
 }

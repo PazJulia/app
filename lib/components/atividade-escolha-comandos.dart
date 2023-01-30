@@ -1,20 +1,22 @@
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AtividadeEscolhaComandos extends StatefulWidget {
+import '../model/atividade.dart';
+import '../screens/pratica.dart';
+import '../state-notifier/atividade-notifier.dart';
+
+final atividadeEscolhaComandos =
+    StateNotifierProvider.autoDispose<AtividadeNotifier, List<Atividade>>(
+        (ref) => AtividadeNotifier());
+
+class AtividadeEscolhaComandos extends ConsumerWidget {
   const AtividadeEscolhaComandos({super.key});
 
   @override
-  _AtividadeEscolhaComandosState createState() =>
-      _AtividadeEscolhaComandosState();
-}
-
-class _AtividadeEscolhaComandosState extends State<AtividadeEscolhaComandos> {
-  var buttonValues = ['a = 3', 'a = \'python\'', 'print(python)', 'a = python'];
-  late List<bool> clickedButtonPosition = buttonValues.map((value) => false).toList();
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    List<Atividade> comandosList = ref.watch(atividadeEscolhaComandos);
+    bool isAtividadeEmpty = ref.watch(isAtividadeEmptyNotifier);
     return Container(
       height: 300,
       padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
@@ -24,20 +26,24 @@ class _AtividadeEscolhaComandosState extends State<AtividadeEscolhaComandos> {
           height: 20,
           child: ElevatedButton(
             onPressed: () {
-              setState(() {
-                clickedButtonPosition = [false, false, false, false];
-                clickedButtonPosition[index] = true;
-              });
+              ref
+                  .read(atividadeEscolhaComandos.notifier)
+                  .changeAllEstadosToFalse();
+              ref
+                  .read(atividadeEscolhaComandos.notifier)
+                  .changeEstado(index, true);
+
+              ref.read(isAtividadeEmptyNotifier.notifier).state = false;
             },
             style: ButtonStyle(
-              backgroundColor: clickedButtonPosition[index] == true
+              backgroundColor: comandosList[index].estado == true
                   ? MaterialStateProperty.all<Color>(secondaryColor)
                   : MaterialStateProperty.all<Color>(primaryColor),
             ),
             child: Text(
-              buttonValues[index],
+              comandosList[index].codigo,
               style: TextStyle(
-                  color: clickedButtonPosition[index] == true
+                  color: comandosList[index].estado == true
                       ? primaryColor
                       : secondaryColor),
             ),
