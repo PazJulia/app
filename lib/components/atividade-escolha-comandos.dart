@@ -25,12 +25,15 @@ class AtividadeEscolhaComandos extends ConsumerWidget {
           height: 20,
           child: ElevatedButton(
             onPressed: () {
-              ref
-                  .read(atividadeEscolhaComandos.notifier)
-                  .resetEstadosAndSetEstadoIndex(index, true);
               if (ref.watch(isAtividadeEmptyNotifier)) {
                 ref.read(isAtividadeEmptyNotifier.notifier).state = false;
               }
+
+              Future.delayed(const Duration(milliseconds: 30), () {
+                ref
+                    .read(atividadeEscolhaComandos.notifier)
+                    .resetEstadosAndSetEstadoIndex(index, true, false);
+              });
             },
             style: ButtonStyle(
               backgroundColor: comandosList[index].estado == true
@@ -38,8 +41,7 @@ class AtividadeEscolhaComandos extends ConsumerWidget {
                   : MaterialStateProperty.all<Color>(primaryColor),
             ),
             child: Text(
-              //comandosList[index].codigo,
-              comandosList[index].json,
+              comandosList[index].codigo,
               style: TextStyle(
                   color: comandosList[index].estado == true
                       ? primaryColor

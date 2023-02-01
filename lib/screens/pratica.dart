@@ -100,7 +100,10 @@ class Pratica extends ConsumerWidget {
                                 ref.watch(porcentagemAtividadeConcluida);
                         ref.read(activityTypeNotifier.notifier).state =
                             activityType + 1;
-                        ref.read(isAtividadeEmptyNotifier.notifier).state = true;
+                        if (ref.watch(isAtividadeEmptyNotifier) == false) {
+                          ref.read(isAtividadeEmptyNotifier.notifier).state =
+                              true;
+                        }
                       },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),

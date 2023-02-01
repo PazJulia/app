@@ -13,8 +13,8 @@ class AtividadeNotifier extends StateNotifier<List<Atividade>> {
     state = state.map((e) => Atividade(codigo: e.codigo, estado: false)).toList();
   }
 
-  void resetEstadosAndSetEstadoIndex(int index, bool estado) {
-    state = state.map((e) => Atividade(codigo: e.codigo, estado: false)).toList();
+  void resetEstadosAndSetEstadoIndex(int index, bool estado, bool allEstados) {
+    state = state.map((e) => Atividade(codigo: e.codigo, estado: allEstados)).toList();
     state[index].estado = estado;
   }
 
