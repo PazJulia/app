@@ -2,6 +2,7 @@ import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-escolha-comandos.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:flutter/services.dart';
 
 import '../shared/values/colors.dart';
 
@@ -13,6 +14,9 @@ class Pratica extends StatelessWidget {
     int activityType = 0;
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: fifthColor),
         toolbarHeight: 80,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -67,7 +71,7 @@ class Pratica extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: 50,
+              height: 60,
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: null,
