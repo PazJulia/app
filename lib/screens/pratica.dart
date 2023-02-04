@@ -1,17 +1,28 @@
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-escolha-comandos.dart';
+import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter/services.dart';
 
 import '../shared/values/colors.dart';
 
-class Pratica extends StatelessWidget {
+final porcentagemAtividadeConcluida =
+    StateProvider.autoDispose<double>((ref) => 0.0);
+
+final isAtividadeEmptyNotifier = StateProvider.autoDispose((ref) => true);
+final activityTypeNotifier = StateProvider.autoDispose((ref) => 0);
+
+class Pratica extends ConsumerWidget {
   const Pratica({super.key});
 
+  static const int totalAtividades = 2;
+
   @override
-  Widget build(BuildContext context) {
-    int activityType = 0;
+  Widget build(BuildContext context, WidgetRef ref) {
+    bool activityEmpty = ref.watch(isAtividadeEmptyNotifier);
+    int activityType = ref.watch(activityTypeNotifier);
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
@@ -23,20 +34,21 @@ class Pratica extends StatelessWidget {
         backgroundColor: fifthColor,
         title: LinearPercentIndicator(
           lineHeight: 20,
-          percent: 0.5,
-          center: const Text(
-            "1/2",
-            style: TextStyle(fontWeight: FontWeight.bold),
+          percent: ref.watch(porcentagemAtividadeConcluida),
+          center: Text(
+            formatDoubleToFractionToText(
+                totalAtividades, ref.watch(porcentagemAtividadeConcluida)),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           barRadius: const Radius.circular(16),
           progressColor: fourthColor,
-          backgroundColor: Colors.grey[300],
+          backgroundColor: sixthColor,
         ),
         actions: [
           IconButton(
             iconSize: 30,
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             color: secondaryColor,
             icon: const Icon(
@@ -54,18 +66,28 @@ class Pratica extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.only(
-                    top: 20, right: 5, bottom: 15, left: 5),
+                    top: 20, right: 5, bottom: 20, left: 5),
                 child: Column(
                   children: [
-                    const Text(
-                      'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(fontWeight: FontWeight.w500),
+                    const Padding(
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: Text(
+                        'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
                     ),
                     if (activityType == 0)
-                      const AtividadeEscolhaComandos()
+                      initiateAtividadeEscolhaComandosWidget([
+                        'a = 3',
+                        'a = \'python\'',
+                        'print(python)',
+                        'a = python'
+                      ], ref)
                     else if (activityType == 1)
-                      const AtividadeEscolhaCodigo()
+                      initiateAtividadeEscolhaCodigoWidget(
+                          ['"', '"', ' = ', '(', ')', 'string python', 'x'],
+                          ref)
                   ],
                 ),
               ),
@@ -74,7 +96,19 @@ class Pratica extends StatelessWidget {
               height: 60,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: null,
+                onPressed: activityEmpty == true
+                    ? null
+                    : () {
+                        ref.read(porcentagemAtividadeConcluida.notifier).state =
+                            getPercentageOfOneFromTotal(totalAtividades) +
+                                ref.watch(porcentagemAtividadeConcluida);
+                        ref.read(activityTypeNotifier.notifier).state =
+                            activityType + 1;
+                        if (ref.watch(isAtividadeEmptyNotifier) == false) {
+                          ref.read(isAtividadeEmptyNotifier.notifier).state =
+                              true;
+                        }
+                      },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
                   backgroundColor: thirdColor,
@@ -91,5 +125,21 @@ class Pratica extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  initiateAtividadeEscolhaCodigoWidget(List<String> list, WidgetRef ref) {
+    Future(() {
+      ref.read(atividadeCodigoProvider.notifier).setCodigos(list, true);
+    });
+
+    return AtividadeEscolhaCodigo(list);
+  }
+
+  initiateAtividadeEscolhaComandosWidget(List<String> list, WidgetRef ref) {
+    Future(() {
+      ref.read(atividadeEscolhaComandos.notifier).setCodigos(list, false);
+    });
+
+    return const AtividadeEscolhaComandos();
   }
 }
