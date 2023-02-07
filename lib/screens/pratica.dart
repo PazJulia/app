@@ -22,6 +22,8 @@ class Pratica extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     bool activityEmpty = ref.watch(isAtividadeEmptyNotifier);
     int activityType = ref.watch(activityTypeNotifier);
+    double percentActivity = ref.watch(porcentagemAtividadeConcluida);
+
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80,
@@ -30,7 +32,7 @@ class Pratica extends ConsumerWidget {
         backgroundColor: fifthColor,
         title: LinearPercentIndicator(
           lineHeight: 20,
-          percent: ref.watch(porcentagemAtividadeConcluida),
+          percent: percentActivity,
           center: Text(
             formatDoubleToFractionToText(
                 totalAtividades, ref.watch(porcentagemAtividadeConcluida)),
@@ -95,15 +97,7 @@ class Pratica extends ConsumerWidget {
                 onPressed: activityEmpty == true
                     ? null
                     : () {
-                        ref.read(porcentagemAtividadeConcluida.notifier).state =
-                            getPercentageOfOneFromTotal(totalAtividades) +
-                                ref.watch(porcentagemAtividadeConcluida);
-                        ref.read(activityTypeNotifier.notifier).state =
-                            activityType + 1;
-                        if (ref.watch(isAtividadeEmptyNotifier) == false) {
-                          ref.read(isAtividadeEmptyNotifier.notifier).state =
-                              true;
-                        }
+                        initiateNextActivity(ref, activityType + 1);
                       },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
@@ -137,5 +131,15 @@ class Pratica extends ConsumerWidget {
     });
 
     return const AtividadeEscolhaComandos();
+  }
+
+  initiateNextActivity(WidgetRef ref, int activityType) {
+    ref.read(porcentagemAtividadeConcluida.notifier).state =
+        getPercentageOfOneFromTotal(totalAtividades) +
+            ref.watch(porcentagemAtividadeConcluida);
+    ref.read(activityTypeNotifier.notifier).state = activityType;
+    if (ref.watch(isAtividadeEmptyNotifier) == false) {
+      ref.read(isAtividadeEmptyNotifier.notifier).state = true;
+    }
   }
 }
