@@ -4,6 +4,7 @@ import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:flutter/services.dart';
 
 import '../shared/values/colors.dart';
 
@@ -26,6 +27,9 @@ class Pratica extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
+        systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: fifthColor),
         toolbarHeight: 80,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -91,7 +95,7 @@ class Pratica extends ConsumerWidget {
               ),
             ),
             SizedBox(
-              height: 50,
+              height: 60,
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: activityEmpty == true
