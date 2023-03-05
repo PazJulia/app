@@ -1,6 +1,5 @@
+import 'package:app/core/domain/model/atividade.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-import '../model/atividade.dart';
 
 class AtividadeNotifier extends StateNotifier<List<Atividade>> {
   AtividadeNotifier({List<Atividade> codigos = const []}) : super(codigos);

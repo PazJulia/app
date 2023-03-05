@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import '../components/alert.dart';
 import '../components/form-field-text.dart';
-import 'home.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -101,17 +100,13 @@ class Login extends StatelessWidget {
       return;
     }
 
-    String login = emailController.text;
+    String email = emailController.text;
     String password = passwordController.text;
 
-    print("login: $login senha: $password");
+    var authorization = await LoginApi.login(email, password);
 
-    var access = await LoginApi.login(login, password);
-
-    if (access != null) {
-      print("==> $access");
-
-      Navigator.push(context, MaterialPageRoute(builder: (context) => const Home()));
+    if (authorization != null) {
+      Navigator.pushNamed(context, '/home');
     } else {
       alert(context, "Ocorreu um erro",
           "Não foi possível iniciar esta sessão pois o login é inválido.");

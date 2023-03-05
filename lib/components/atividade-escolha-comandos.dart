@@ -2,7 +2,7 @@ import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../model/atividade.dart';
+import 'package:app/core/domain/model/atividade.dart';
 import '../screens/pratica.dart';
 import '../state-notifier/atividade-notifier.dart';
 

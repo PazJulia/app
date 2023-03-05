@@ -9,7 +9,7 @@ alert(BuildContext context,String title, String message) {
           content: Text(message),
           actions: <Widget>[
             TextButton(
-              child: Text("OK"),
+              child: const Text("OK"),
               onPressed: () {
                 Navigator.pop(context);
               },

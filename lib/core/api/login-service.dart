@@ -6,43 +6,42 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
 import '../../screens/login.dart';
-import '../domain/access.dart';
+import '../domain/authorization.dart';
 
 class LoginApi {
   LoginApi();
 
-  static Future<Access> login(String user, String password) async {
-    var url = 'http://10.0.0.106/auth';
+  static Future<Authorization> login(String email, String password) async {
+    const String url = "http://10.0.0.106:8080/auth";
+    final Map<String, dynamic> body = {"email": email, "senha": password};
+    final headers = {'accept': '*/*', 'Content-Type': 'application/json'};
 
-    var header = {"Content-Type": "application/json"};
+    final response = await http.post(Uri.parse(url),
+        headers: headers, body: jsonEncode(body));
 
-    Map params = {"email": user, "senha": password};
-
-    var acesso;
-
-    var prefs = await SharedPreferences.getInstance();
-
-    var body = json.encode(params);
-    print("json enviado : $body");
-
-    var response = await http.post(Uri.parse(url), headers: header, body: body);
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
-    Map mapResponse = json.decode(response.body);
     if (response.statusCode == 200) {
-      acesso = Access.fromJson(mapResponse as Map<String, dynamic>);
-      prefs.setString("access", mapResponse["access"]);
+      // Requisição bem sucedida
+      print(response.body);
+      String? authorizationToken = response.headers["authorization"];
+      print(authorizationToken);
+      if (authorizationToken != null) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("authorization", authorizationToken);
+        return Authorization(authorization: authorizationToken);
+      } else {
+        return Future.error("Não foi possível obter o token de acesso");
+      }
     } else {
-      acesso = null;
+      // Algo deu errado durante a requisição
+      print(response.statusCode);
+      print("----------------->>> $response");
+      return Future.error("Erro durante a autenticação");
     }
-    return acesso;
   }
 
   Future<Widget> getHome() async {
     var prefs = await SharedPreferences.getInstance();
-    if (prefs.getString("access") != null) {
+    if (prefs.getString("authorization") != null) {
       return const Home();
     } else {
       return const Login();

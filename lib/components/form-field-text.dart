@@ -9,8 +9,14 @@ class FormFieldText extends StatelessWidget {
   final TextEditingController controller;
   final FormFieldValidator<String> validator;
 
-  const FormFieldText({super.key, required this.placeholder, required this.icon, required this.inputType, required this.isPassword, required this.controller, required this.validator});
-
+  const FormFieldText(
+      {super.key,
+      required this.placeholder,
+      required this.icon,
+      required this.inputType,
+      required this.isPassword,
+      required this.controller,
+      required this.validator});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +26,10 @@ class FormFieldText extends StatelessWidget {
       keyboardType: inputType,
       obscureText: isPassword,
       decoration: InputDecoration(
-          enabledBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: secondaryColor)),
-          focusedBorder:
-          UnderlineInputBorder(borderSide: BorderSide(color: secondaryColor)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: secondaryColor)),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: secondaryColor)),
           labelText: placeholder,
           prefixIcon: Container(
             transform: Matrix4.translationValues(-10.0, 0.0, 0.0),

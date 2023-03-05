@@ -5,14 +5,14 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ApiService {
-  String apiPath = '10.0.0.106:8080/';
+  String apiPath = 'http://10.0.0.106:8080/';
 
   dynamic get(String url, [Map<String, String> params = const {} ]) async {
     var prefs = await SharedPreferences.getInstance();
 
-    String access = (prefs.getString("access") ?? "");
+    String authorization = (prefs.getString("authorization") ?? "");
 
-    var headers = {"Authorization": "Bearer $access"};
+    var headers = {"Authorization": "Bearer $authorization"};
 
     if (params != {}) {
       headers.addAll(params);
@@ -28,10 +28,10 @@ class ApiService {
   dynamic post(String url, Map id, [Map<String, String> params = const {}]) async {
     var prefs = await SharedPreferences.getInstance();
 
-    String access = (prefs.getString("access") ?? "");
+    String authorization = (prefs.getString("authorization") ?? "");
 
     var headers = {
-      "Authorization": "Bearer $access",
+      "Authorization": "Bearer $authorization",
       "Accept": "application/json",
       "Content-Type": "application/json"
     };

@@ -1,4 +1,5 @@
 import 'package:app/screens/formacao.dart';
+import 'package:app/screens/home.dart';
 import 'package:app/screens/login.dart';
 import 'package:app/screens/pratica.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
                   return const CircularProgressIndicator();
                 }
               }),
+          '/home': (context) => const Home(),
           '/formacao': (context) => const FormacaoCards(),
           '/pratica': (context) => const Pratica(),
         });
