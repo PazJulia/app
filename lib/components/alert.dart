@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 alert(BuildContext context,String title, String message) {
   showDialog(
       context: context,
-      builder: (context) {
+      builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
           content: Text(message),
@@ -11,7 +11,7 @@ alert(BuildContext context,String title, String message) {
             TextButton(
               child: const Text("OK"),
               onPressed: () {
-                Navigator.pop(context);
+                Navigator.of(context).pop();
               },
             )
           ],

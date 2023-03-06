@@ -1,3 +1,4 @@
+import 'package:app/core/api/login-service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -35,12 +36,25 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    LoginApi();
     return Scaffold(
       backgroundColor: fifthColor,
       appBar: AppBar(
         backgroundColor: Colors.white,
         shadowColor: const Color.fromARGB(4, 0, 0, 0),
+        automaticallyImplyLeading: false,
         title: const Text('Teste', style: TextStyle(color: Colors.black)),
+        actions: [
+          IconButton(
+            iconSize: 30,
+            onPressed: () {
+              LoginApi.logout(context);
+            },
+            icon: const Icon(
+              Icons.logout,
+            ),
+          )
+        ],
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.white),

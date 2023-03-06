@@ -1,6 +1,5 @@
 import 'package:app/screens/formacao.dart';
 import 'package:app/screens/home.dart';
-import 'package:app/screens/login.dart';
 import 'package:app/screens/pratica.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,6 +1,7 @@
 import 'package:app/core/api/login-service.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../components/alert.dart';
 import '../components/form-field-text.dart';
@@ -13,8 +14,15 @@ class Login extends StatelessWidget {
     final formKey = GlobalKey<FormState>();
     final emailController = TextEditingController();
     final passwordController = TextEditingController();
+
+    const String assetName = 'assets/logo.svg';
+    final Widget logo = SvgPicture.asset(
+      assetName,
+      semanticsLabel: 'Code Play Logo',
+      width: 250,
+    );
     return Scaffold(
-      body: body(context, formKey, emailController, passwordController),
+      body: body(context, formKey, emailController, passwordController, logo),
       backgroundColor: fifthColor,
     );
   }
@@ -23,7 +31,8 @@ class Login extends StatelessWidget {
       BuildContext context,
       GlobalKey<FormState> formKey,
       TextEditingController emailController,
-      TextEditingController passwordController) {
+      TextEditingController passwordController,
+      Widget logo) {
     return Form(
       key: formKey,
       child: Padding(
@@ -33,13 +42,15 @@ class Login extends StatelessWidget {
             child: Column(
               children: [
                 Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text('Login'),
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 50),
+                      child: logo,
+                    ),
                     FormFieldText(
                       controller: emailController,
                       placeholder: 'E-mail',
-                      icon: const Icon(Icons.email_outlined),
+                      icon: Icon(Icons.email_outlined, color: secondaryColor),
                       inputType: TextInputType.emailAddress,
                       isPassword: false,
                       validator: (value) => emailValidator(value!),
@@ -47,23 +58,34 @@ class Login extends StatelessWidget {
                     FormFieldText(
                       controller: passwordController,
                       placeholder: 'Senha',
-                      icon: const Icon(Icons.lock_outline),
+                      icon: Icon(Icons.lock_outline, color: secondaryColor),
                       inputType: TextInputType.text,
                       isPassword: true,
                       validator: (value) => passValidator(value!),
                     ),
-                    SizedBox(
-                      height: 60,
-                      width: 130,
-                      child: TextButton(
-                        child: const Text(
-                          "Entrar",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 70),
+                      child: SizedBox(
+                        height: 60,
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _clickButton(context, formKey, emailController,
+                                passwordController);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            shape: const BeveledRectangleBorder(),
+                            backgroundColor: secondaryColor,
+                            shadowColor: Colors.transparent,
+                            disabledBackgroundColor: primaryColor,
+                          ),
+                          child: Text(
+                            'ENTRAR',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: primaryColor),
+                          ),
                         ),
-                        onPressed: () {
-                          _clickButton(context, formKey, emailController,
-                              passwordController);
-                        },
                       ),
                     ),
                   ],

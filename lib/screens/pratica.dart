@@ -50,7 +50,7 @@ class Pratica extends ConsumerWidget {
           IconButton(
             iconSize: 30,
             onPressed: () {
-              Navigator.popUntil(context, ModalRoute.withName('/'));
+              Navigator.popUntil(context, ModalRoute.withName('/home'));
             },
             color: secondaryColor,
             icon: const Icon(

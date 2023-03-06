@@ -21,43 +21,45 @@ class FormacaoCards extends StatelessWidget {
             color: const Color.fromARGB(255, 195, 219, 255),
             clipBehavior: Clip.hardEdge,
             elevation: 2,
-            child: Column(children: [
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  verticalDirection: VerticalDirection.up,
-                  children: const [
-                    Padding(
-                      padding: EdgeInsets.all(8),
-                      child: LessonsTimeline(),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                alignment: Alignment.bottomLeft,
-                color: Colors.black,
-                child: Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, top: 15, right: 20, bottom: 15),
+            child: Column(
+              children: [
+                SizedBox(
+                  width: double.infinity,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    verticalDirection: VerticalDirection.up,
                     children: const [
-                      Text(
-                        'Título Módulo',
-                        style: TextStyle(
-                            color: Colors.white, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        'Teste de descrição de módulooooooooooooooooooooooooooooooooooooo',
-                        style: TextStyle(color: Colors.white),
+                      Padding(
+                        padding: EdgeInsets.all(8),
+                        child: LessonsTimeline(),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ]),
+                Container(
+                  width: double.infinity,
+                  alignment: Alignment.bottomLeft,
+                  color: Colors.black,
+                  child: Padding(
+                    padding: const EdgeInsets.only(
+                        left: 20, top: 15, right: 20, bottom: 15),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Título Módulo',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          'Teste de descrição de módulooooooooooooooooooooooooooooooooooooo',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],

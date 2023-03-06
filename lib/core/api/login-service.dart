@@ -20,10 +20,7 @@ class LoginApi {
         headers: headers, body: jsonEncode(body));
 
     if (response.statusCode == 200) {
-      // Requisição bem sucedida
-      print(response.body);
       String? authorizationToken = response.headers["authorization"];
-      print(authorizationToken);
       if (authorizationToken != null) {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.setString("authorization", authorizationToken);
@@ -32,9 +29,6 @@ class LoginApi {
         return Future.error("Não foi possível obter o token de acesso");
       }
     } else {
-      // Algo deu errado durante a requisição
-      print(response.statusCode);
-      print("----------------->>> $response");
       return Future.error("Erro durante a autenticação");
     }
   }
@@ -48,9 +42,9 @@ class LoginApi {
     }
   }
 
-  static Future<Widget> logout() async {
+  static Future<Widget?> logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    return const Login();
+    Navigator.popUntil(context, ModalRoute.withName('/'));
   }
 }
