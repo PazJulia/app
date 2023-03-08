@@ -70,7 +70,7 @@ class Login extends StatelessWidget {
                         width: double.infinity,
                         child: ElevatedButton(
                           onPressed: () {
-                            _clickButton(context, formKey, emailController,
+                            onLogin(context, formKey, emailController,
                                 passwordController);
                           },
                           style: ElevatedButton.styleFrom(
@@ -112,7 +112,7 @@ class Login extends StatelessWidget {
     return null;
   }
 
-  _clickButton(
+  onLogin(
       BuildContext context,
       GlobalKey<FormState> formKey,
       TextEditingController emailController,
@@ -122,16 +122,11 @@ class Login extends StatelessWidget {
       return;
     }
 
-    String email = emailController.text;
-    String password = passwordController.text;
-
-    var authorization = await LoginApi.login(email, password);
-
-    if (authorization != null) {
+    LoginApi.login(emailController.text, passwordController.text).then((authorization) {
       Navigator.pushNamed(context, '/home');
-    } else {
-      alert(context, "Ocorreu um erro",
-          "Não foi possível iniciar esta sessão pois o login é inválido.");
-    }
+      formKey.currentState?.reset();
+    }).catchError((error) {
+      alert(context, "Ocorreu um erro", "$error");
+    });
   }
 }

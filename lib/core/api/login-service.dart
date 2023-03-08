@@ -29,7 +29,7 @@ class LoginApi {
         return Future.error("Não foi possível obter o token de acesso");
       }
     } else {
-      return Future.error("Erro durante a autenticação");
+      return Future.error("E-mail ou senha inválidos");
     }
   }
 
@@ -42,7 +42,7 @@ class LoginApi {
     }
   }
 
-  static Future<Widget?> logout(context) async {
+  static Future logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     Navigator.popUntil(context, ModalRoute.withName('/'));
