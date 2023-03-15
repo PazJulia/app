@@ -11,8 +11,9 @@ class ApiService {
     var prefs = await SharedPreferences.getInstance();
 
     String authorization = (prefs.getString("authorization") ?? "");
+    final headers = {'accept': '*/*', 'Content-Type': 'application/json'};
 
-    var headers = {"Authorization": "Bearer $authorization"};
+    //var headers = {"Authorization": "Bearer $authorization"};
 
     if (params != {}) {
       headers.addAll(params);
@@ -30,11 +31,7 @@ class ApiService {
 
     String authorization = (prefs.getString("authorization") ?? "");
 
-    var headers = {
-      "Authorization": "Bearer $authorization",
-      "Accept": "application/json",
-      "Content-Type": "application/json"
-    };
+    final headers = {'accept': '*/*', 'Content-Type': 'application/json'};
 
     var _body = json.encode(id);
     print("json enviado : $_body");

@@ -18,7 +18,7 @@ class StarsRating extends StatelessWidget {
     return const Icon(
       Icons.star_rate_rounded,
       color: Colors.yellowAccent,
-      size: 29,
+      size: 32,
       shadows: <Shadow>[Shadow(color: Colors.grey, blurRadius: 1.5)],
     );
   }
