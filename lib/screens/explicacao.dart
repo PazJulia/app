@@ -6,9 +6,8 @@ import 'package:flutter/services.dart';
 import '../components/stars-rating.dart';
 
 class Explicacao extends StatelessWidget {
-  const Explicacao({super.key});
-
-  static const type = 1;
+  const Explicacao(int this.licaoId, {super.key});
+  final int licaoId;
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +43,7 @@ class Explicacao extends StatelessWidget {
           )
         ],
       ),
-      body: const ExplicacaoSlides(),
+      body: ExplicacaoSlides(licaoId),
     );
   }
 }

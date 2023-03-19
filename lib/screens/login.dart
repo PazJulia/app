@@ -6,15 +6,21 @@ import 'package:flutter_svg/svg.dart';
 import '../components/alert.dart';
 import '../components/form-field-text.dart';
 
-class Login extends StatelessWidget {
-  const Login({super.key});
+class Login extends StatefulWidget {
+  const Login({Key? key}) : super(key: key);
+
+  @override
+  LoginState createState() => LoginState();
+}
+
+class LoginState extends State<Login> {
+  final formKey = GlobalKey<FormState>();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final emailController = TextEditingController();
-    final passwordController = TextEditingController();
-
     const String assetName = 'assets/logo.svg';
     final Widget logo = SvgPicture.asset(
       assetName,
@@ -22,17 +28,12 @@ class Login extends StatelessWidget {
       width: 250,
     );
     return Scaffold(
-      body: body(context, formKey, emailController, passwordController, logo),
+      body: body(context, logo),
       backgroundColor: fifthColor,
     );
   }
 
-  body(
-      BuildContext context,
-      GlobalKey<FormState> formKey,
-      TextEditingController emailController,
-      TextEditingController passwordController,
-      Widget logo) {
+  body(BuildContext context, Widget logo) {
     return Form(
       key: formKey,
       child: Padding(
@@ -69,22 +70,27 @@ class Login extends StatelessWidget {
                         height: 60,
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            onLogin(context, formKey, emailController,
-                                passwordController);
-                          },
+                          onPressed: _isLoading
+                              ? null
+                              : () => onLogin(context, formKey, emailController,
+                                  passwordController),
                           style: ElevatedButton.styleFrom(
                             shape: const BeveledRectangleBorder(),
                             backgroundColor: secondaryColor,
                             shadowColor: Colors.transparent,
-                            disabledBackgroundColor: primaryColor,
+                            disabledBackgroundColor: secondaryColor,
                           ),
-                          child: Text(
-                            'ENTRAR',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: primaryColor),
-                          ),
+                          child: _isLoading
+                              ? CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      primaryColor),
+                                )
+                              : Text(
+                                  'ENTRAR',
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryColor),
+                                ),
                         ),
                       ),
                     ),
@@ -121,12 +127,22 @@ class Login extends StatelessWidget {
     if (!formOk!) {
       return;
     }
-
-    LoginApi.login(emailController.text, passwordController.text).then((authorization) {
-      Navigator.pushNamed(context, '/home');
-      formKey.currentState?.reset();
-    }).catchError((error) {
-      alert(context, "Ocorreu um erro", "$error");
+    setState(() {
+      _isLoading = true;
     });
+
+    try {
+      await LoginApi.login(emailController.text, passwordController.text)
+          .then((authorization) {
+        Navigator.pushNamed(context, '/home');
+        formKey.currentState?.reset();
+      }).catchError((error) {
+        alert(context, "Ocorreu um erro", "$error");
+      });
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 }

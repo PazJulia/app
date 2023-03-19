@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 
 class ExplicacaoSlides extends StatefulWidget {
-  const ExplicacaoSlides({super.key});
+  const ExplicacaoSlides(int this.licaoId, {super.key});
+  final int licaoId;
 
   @override
   _ExplicacaoSlidesState createState() => _ExplicacaoSlidesState();
