@@ -2,9 +2,11 @@ import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:intro_slider/intro_slider.dart';
 
+import '../core/domain/licao/licao.dart';
+
 class ExplicacaoSlides extends StatefulWidget {
-  const ExplicacaoSlides(int this.licaoId, {super.key});
-  final int licaoId;
+  const ExplicacaoSlides(this.licao, {super.key});
+  final Licao licao;
 
   @override
   _ExplicacaoSlidesState createState() => _ExplicacaoSlidesState();

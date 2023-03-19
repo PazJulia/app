@@ -45,6 +45,6 @@ class LoginApi {
   static Future logout(context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.popUntil(context, ModalRoute.withName('/'));
+    Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
   }
 }

@@ -48,7 +48,7 @@ class LessonsTimeline extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Explicacao(licao.id),
+                            builder: (context) => Explicacao(licao.id, licao.nome),
                           ),
                         );
                       },
