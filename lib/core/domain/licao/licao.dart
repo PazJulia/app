@@ -13,9 +13,14 @@ class Licao {
       required this.questoes});
 
   factory Licao.fromJson(Map<String, dynamic> json) {
-    var questoes = json['questoes'] as List;
-    List<Questao> questionList =
-        questoes.map((e) => Questao.fromJson(e)).toList();
+    var questoes = json['questoes'] as List?;
+    print('questoes: $questoes');
+
+    if (questoes == null) {
+      throw Exception('Failed to decode Licao. Questoes are null.');
+    }
+
+    List<Questao> questionList = questoes.map((e) => Questao.fromJson(e)).toList();
     return Licao(
       id: json['id'],
       nome: json['nome'],
@@ -23,4 +28,5 @@ class Licao {
       questoes: questionList,
     );
   }
+
 }

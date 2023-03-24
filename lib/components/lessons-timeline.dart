@@ -8,9 +8,10 @@ import '../screens/explicacao.dart';
 import '../shared/values/colors.dart';
 
 class LessonsTimeline extends StatelessWidget {
-  const LessonsTimeline({Key? key, required this.licoes}) : super(key: key);
+  const LessonsTimeline({Key? key, required this.licoes, required this.cor}) : super(key: key);
 
   final List<Licoes> licoes;
+  final String cor;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class LessonsTimeline extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Explicacao(licao.id, licao.nome),
+                            builder: (context) => Explicacao(licao.id, licao.nome, cor),
                           ),
                         );
                       },

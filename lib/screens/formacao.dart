@@ -17,13 +17,10 @@ class FormacaoCards extends StatelessWidget {
         future: modulosController.modulosList(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            // Return a loading indicator while data is being fetched
             return const CircularProgressIndicator();
           } else if (snapshot.hasError) {
-            // Return an error message if there is an error
             return Text('Error: ${snapshot.error}');
           } else {
-            // Return your ListView with the data
             return ListView.builder(
               padding: const EdgeInsets.only(
                   top: 0, right: 10, bottom: 10, left: 10),
@@ -50,7 +47,7 @@ class FormacaoCards extends StatelessWidget {
                             children: [
                               Padding(
                                 padding: const EdgeInsets.all(8),
-                                child: LessonsTimeline(licoes: item.licoes),
+                                child: LessonsTimeline(licoes: item.licoes, cor: item.cor),
                               ),
                             ],
                           ),

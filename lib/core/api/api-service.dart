@@ -52,7 +52,8 @@ class ApiService {
           Exception("Erro");
           break;
       }
+    } else {
+      log("Sucesso de conexão: $url");
     }
-    log("Sucesso de conexão: $url");
   }
 }
