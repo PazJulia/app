@@ -1,5 +1,7 @@
 import 'package:app/components/atividade-escolha-codigo.dart';
-import 'package:app/components/atividade-escolha-comandos.dart';
+import 'package:app/components/atividade-alternativa.dart';
+import 'package:app/core/domain/licao/alternativa.dart';
+import 'package:app/core/domain/licao/questao.dart';
 import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -12,7 +14,7 @@ final porcentagemAtividadeConcluida =
     StateProvider.autoDispose<double>((ref) => 0.0);
 
 final isAtividadeEmptyNotifier = StateProvider.autoDispose((ref) => true);
-final activityTypeNotifier = StateProvider.autoDispose((ref) => 0);
+final activityIndexNotifier = StateProvider.autoDispose((ref) => 0);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
@@ -21,8 +23,11 @@ class Pratica extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    bool activityEmpty = ref.watch(isAtividadeEmptyNotifier);
-    int activityType = ref.watch(activityTypeNotifier);
+    final questoes =
+        ModalRoute.of(context)?.settings.arguments as List<Questao>?;
+
+    bool isAtividadeEmpty = ref.watch(isAtividadeEmptyNotifier);
+    int atividadeIndex = ref.watch(activityIndexNotifier);
     double percentActivity = ref.watch(porcentagemAtividadeConcluida);
 
     return Scaffold(
@@ -50,7 +55,7 @@ class Pratica extends ConsumerWidget {
           IconButton(
             iconSize: 30,
             onPressed: () {
-              Navigator.popUntil(context, ModalRoute.withName('/home'));
+              Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
             },
             color: secondaryColor,
             icon: const Icon(
@@ -71,22 +76,30 @@ class Pratica extends ConsumerWidget {
                     top: 20, right: 5, bottom: 20, left: 5),
                 child: Column(
                   children: [
-                    const Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: Text(
-                        'Texto de descrição da atividade\n\nLorem ipsum lorem lorem:\nexemplo exemplo',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                    Container(
+                      padding: const EdgeInsets.only(bottom: 20),
+                      child: Column(
+                        children: [
+                          Text(
+                            questoes![atividadeIndex].textoInicial,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 18),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Text(
+                            questoes![atividadeIndex].pergunta,
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       ),
                     ),
-                    if (activityType == 0)
-                      initiateAtividadeEscolhaComandosWidget([
-                        'a = 3',
-                        'a = \'python\'',
-                        'print(python)',
-                        'a = python'
-                      ], ref)
-                    else if (activityType == 1)
+                    if (questoes[atividadeIndex].tipo == 'PerguntaResposta')
+                      initiateAtividadeEscolhaComandosWidget(questoes[atividadeIndex].alternativas, ref)
+                    else if (questoes[atividadeIndex].tipo == 'Programacao')
                       initiateAtividadeEscolhaCodigoWidget(
                           ['"', '"', ' = ', '(', ')', 'string python', 'x'],
                           ref)
@@ -98,10 +111,10 @@ class Pratica extends ConsumerWidget {
               height: 60,
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: activityEmpty == true
+                onPressed: isAtividadeEmpty == true
                     ? null
                     : () {
-                        initiateNextActivity(ref, activityType + 1);
+                        initiateNextActivity(ref, atividadeIndex);
                       },
                 style: ElevatedButton.styleFrom(
                   shape: const BeveledRectangleBorder(),
@@ -129,19 +142,19 @@ class Pratica extends ConsumerWidget {
     return AtividadeEscolhaCodigo(list);
   }
 
-  initiateAtividadeEscolhaComandosWidget(List<String> list, WidgetRef ref) {
+  initiateAtividadeEscolhaComandosWidget(List<Alternativa> list, WidgetRef ref) {
     Future(() {
-      ref.read(atividadeEscolhaComandos.notifier).setCodigos(list, false);
+      ref.read(atividadeAlternativa.notifier).setCodigos(list, false);
     });
 
-    return const AtividadeEscolhaComandos();
+    return const AtividadeAlternativa();
   }
 
-  initiateNextActivity(WidgetRef ref, int activityType) {
+  initiateNextActivity(WidgetRef ref, int atividadeIndex) {
     ref.read(porcentagemAtividadeConcluida.notifier).state =
         getPercentageOfOneFromTotal(totalAtividades) +
             ref.watch(porcentagemAtividadeConcluida);
-    ref.read(activityTypeNotifier.notifier).state = activityType;
+    ref.read(activityIndexNotifier.notifier).state = atividadeIndex + 1;
     if (ref.watch(isAtividadeEmptyNotifier) == false) {
       ref.read(isAtividadeEmptyNotifier.notifier).state = true;
     }

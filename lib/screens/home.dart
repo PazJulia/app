@@ -13,17 +13,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  int _selectedIndex = 1;
+  int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Text(
+    /*Text(
       'Index 0: Home',
       style: optionStyle,
-    ),
+    ),*/
     FormacaoCards(),
     Text(
-      'Index 2: School',
+      'Divisão',
       style: optionStyle,
     ),
   ];
@@ -66,11 +66,11 @@ class _HomeState extends State<Home> {
         elevation: 1,
         iconSize: 28,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             activeIcon: Icon(Icons.emoji_events_sharp),
             icon: Icon(Icons.emoji_events_outlined),
             label: 'Conquistas',
-          ),
+          ),*/
           BottomNavigationBarItem(
             activeIcon: Icon(Icons.school_sharp),
             icon: Icon(Icons.school_outlined),

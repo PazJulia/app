@@ -16,7 +16,7 @@ class ExplicacaoSlides extends StatefulWidget {
 
 class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
   int explicacaoIndex = 0;
-  String currentExplicacao = '';
+  String explicacaoAtual = '';
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +54,7 @@ class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
             Icons.arrow_back_rounded,
             () {
               setState(() {
-                currentExplicacao = widget.licao!.explicacao[explicacaoIndex];
+                explicacaoAtual = widget.licao!.explicacao[explicacaoIndex];
                 explicacaoIndex--;
               });
             },
@@ -64,7 +64,7 @@ class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
           renderButton(
             Icons.check_rounded,
             () => {
-              Navigator.pushNamed(context, '/pratica'),
+              Navigator.pushNamed(context, '/pratica', arguments: widget.licao?.questoes),
             },
           ),
         if (explicacaoIndex < widget.licao!.explicacao.length - 1)
@@ -73,7 +73,7 @@ class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
             () {
               setState(
                 () {
-                  currentExplicacao = widget.licao!.explicacao[explicacaoIndex];
+                  explicacaoAtual = widget.licao!.explicacao[explicacaoIndex];
                   explicacaoIndex++;
                 },
               );
