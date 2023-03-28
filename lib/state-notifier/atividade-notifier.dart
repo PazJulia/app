@@ -9,15 +9,15 @@ class AtividadeNotifier extends StateNotifier<List<Atividade>> {
   }
 
   void changeAllEstadosToFalse() {
-    state = state.map((e) => Atividade(codigo: e.codigo, estado: false)).toList();
+    state = state.map((e) => Atividade(itemAtividade: e.itemAtividade, estado: false)).toList();
   }
 
   void resetEstadosAndSetEstadoIndex(int index, bool estado, bool allEstados) {
-    state = state.map((e) => Atividade(codigo: e.codigo, estado: allEstados)).toList();
+    state = state.map((e) => Atividade(itemAtividade: e.itemAtividade, estado: allEstados)).toList();
     state[index].estado = estado;
   }
 
-  void setCodigos(List<String> codigos, estado) {
-    state = codigos.map((e) => Atividade(codigo: e, estado: estado)).toList();
+  void setActivity(List<dynamic> activityItem, estado) {
+    state = activityItem.map((e) => Atividade(itemAtividade: e, estado: estado)).toList();
   }
 }

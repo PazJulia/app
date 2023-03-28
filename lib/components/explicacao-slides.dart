@@ -36,11 +36,13 @@ class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
       return const Text('Não foi possível encontrar a lição');
     } else {
       return Center(
-        child: Text(
+          child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Text(textAlign: TextAlign.center,
           widget.licao!.explicacao[explicacaoIndex],
           style: const TextStyle(fontSize: 18),
         ),
-      );
+      ));
     }
   }
 
@@ -64,7 +66,8 @@ class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
           renderButton(
             Icons.check_rounded,
             () => {
-              Navigator.pushNamed(context, '/pratica', arguments: widget.licao?.questoes),
+              Navigator.pushNamed(context, '/pratica',
+                  arguments: widget.licao?.questoes),
             },
           ),
         if (explicacaoIndex < widget.licao!.explicacao.length - 1)

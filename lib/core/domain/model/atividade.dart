@@ -1,6 +1,6 @@
 class Atividade {
-  final String codigo;
+  final Object itemAtividade;
   bool estado;
 
-  Atividade({required this.codigo, required this.estado});
+  Atividade({required this.itemAtividade, required this.estado});
 }

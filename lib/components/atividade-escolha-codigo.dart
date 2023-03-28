@@ -1,6 +1,7 @@
 import 'package:app/core/domain/model/atividade.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../core/domain/licao/comando.dart';
 import '../screens/pratica.dart';
 import '../shared/values/colors.dart';
 import '../state-notifier/atividade-notifier.dart';
@@ -14,7 +15,7 @@ final respostaAtividadeCodigo =
 class AtividadeEscolhaCodigo extends ConsumerWidget {
   const AtividadeEscolhaCodigo(this.codes, {super.key});
 
-  final List<String> codes;
+  final List<Comando> codes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -49,7 +50,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                     onPressed: () {
                       ref
                           .read(atividadeCodigoProvider.notifier)
-                          .setCodigos(codes, true);
+                          .setActivity(codes, true);
                       ref.read(respostaAtividadeCodigo.notifier).state = [];
                       ref.read(isAtividadeEmptyNotifier.notifier).state =
                       true;
@@ -82,7 +83,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                                     .read(atividadeCodigoProvider.notifier)
                                     .changeEstado(index, false);
 
-                                resposta.add(codigosList[index].codigo);
+                                resposta.add((codigosList[index].itemAtividade as Comando).nome);
 
                                 ref
                                     .read(respostaAtividadeCodigo.notifier)
@@ -96,7 +97,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                               : MaterialStateProperty.all<Color>(fifthColor),
                         ),
                         child: Text(
-                          codigosList[index].codigo,
+                          (codigosList[index].itemAtividade as Comando).nome,
                           style: TextStyle(
                               color: codigosList[index].estado == true
                                   ? primaryColor

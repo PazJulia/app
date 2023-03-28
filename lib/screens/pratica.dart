@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter/services.dart';
 
+import '../core/domain/licao/comando.dart';
 import '../shared/values/colors.dart';
 
 final porcentagemAtividadeConcluida =
@@ -89,7 +90,7 @@ class Pratica extends ConsumerWidget {
                             height: 10,
                           ),
                           Text(
-                            questoes![atividadeIndex].pergunta,
+                            questoes[atividadeIndex].pergunta,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
@@ -100,9 +101,7 @@ class Pratica extends ConsumerWidget {
                     if (questoes[atividadeIndex].tipo == 'PerguntaResposta')
                       initiateAtividadeEscolhaComandosWidget(questoes[atividadeIndex].alternativas, ref)
                     else if (questoes[atividadeIndex].tipo == 'Programacao')
-                      initiateAtividadeEscolhaCodigoWidget(
-                          ['"', '"', ' = ', '(', ')', 'string python', 'x'],
-                          ref)
+                      initiateAtividadeEscolhaCodigoWidget(questoes[atividadeIndex].comandos, ref)
                   ],
                 ),
               ),
@@ -134,17 +133,17 @@ class Pratica extends ConsumerWidget {
     );
   }
 
-  initiateAtividadeEscolhaCodigoWidget(List<String> list, WidgetRef ref) {
+  initiateAtividadeEscolhaCodigoWidget(List<Comando>? list, WidgetRef ref) {
     Future(() {
-      ref.read(atividadeCodigoProvider.notifier).setCodigos(list, true);
+      ref.read(atividadeCodigoProvider.notifier).setActivity(list!, true);
     });
 
-    return AtividadeEscolhaCodigo(list);
+    return AtividadeEscolhaCodigo(list!);
   }
 
-  initiateAtividadeEscolhaComandosWidget(List<Alternativa> list, WidgetRef ref) {
+  initiateAtividadeEscolhaComandosWidget(List<Alternativa>? list, WidgetRef ref) {
     Future(() {
-      ref.read(atividadeAlternativa.notifier).setCodigos(list, false);
+      ref.read(atividadeAlternativa.notifier).setActivity(list!, false);
     });
 
     return const AtividadeAlternativa();

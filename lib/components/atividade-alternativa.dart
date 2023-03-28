@@ -1,3 +1,4 @@
+import 'package:app/core/domain/licao/alternativa.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,16 +12,21 @@ final atividadeAlternativa =
         (ref) => AtividadeNotifier());
 
 class AtividadeAlternativa extends ConsumerWidget {
-  const AtividadeAlternativa({super.key});
+  const AtividadeAlternativa({Key? key}) : super(key: key);
+
+  bool hasValidAlternativaAtIndex(List<Atividade> alternativas, int index) {
+    return index < alternativas.length &&
+        alternativas[index].itemAtividade is Alternativa;
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    List<Atividade> alternativasList = ref.watch(atividadeAlternativa);
+    final alternativas = ref.watch(atividadeAlternativa);
     return Expanded(
       child: Container(
         padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
         child: GridView.builder(
-          itemCount: 4,
+          itemCount: alternativas.length,
           itemBuilder: (context, index) => SizedBox(
             height: 20,
             child: ElevatedButton(
@@ -36,14 +42,20 @@ class AtividadeAlternativa extends ConsumerWidget {
                 });
               },
               style: ButtonStyle(
-                backgroundColor: alternativasList[index].estado == true
-                    ? MaterialStateProperty.all<Color>(secondaryColor)
-                    : MaterialStateProperty.all<Color>(primaryColor),
+                backgroundColor:
+                    hasValidAlternativaAtIndex(alternativas, index) &&
+                            alternativas[index].estado
+                        ? MaterialStateProperty.all<Color>(secondaryColor)
+                        : MaterialStateProperty.all<Color>(primaryColor),
               ),
               child: Text(
-                alternativasList[index].codigo,
+                hasValidAlternativaAtIndex(alternativas, index)
+                    ? (alternativas[index].itemAtividade as Alternativa)
+                        .descricao
+                    : '',
                 style: TextStyle(
-                    color: alternativasList[index].estado == true
+                    color: hasValidAlternativaAtIndex(alternativas, index) &&
+                            alternativas[index].estado
                         ? primaryColor
                         : secondaryColor),
               ),
