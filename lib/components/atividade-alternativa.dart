@@ -25,48 +25,52 @@ class AtividadeAlternativa extends ConsumerWidget {
     return Expanded(
       child: Container(
         padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
-        child: GridView.builder(
-          itemCount: alternativas.length,
-          itemBuilder: (context, index) => SizedBox(
-            height: 20,
-            child: ElevatedButton(
-              onPressed: () {
-                if (ref.watch(isAtividadeEmptyNotifier)) {
-                  ref.read(isAtividadeEmptyNotifier.notifier).state = false;
-                }
+        child: Column(
+          children: [
+            for (int i = 0; i < alternativas.length; i++)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: FittedBox(
+                  child: SizedBox(
+                    height: 50,
+                    width: 300,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        if (ref.watch(isAtividadeEmptyNotifier)) {
+                          ref.read(isAtividadeEmptyNotifier.notifier).state =
+                              false;
+                        }
 
-                Future.delayed(const Duration(milliseconds: 30), () {
-                  ref
-                      .read(atividadeAlternativa.notifier)
-                      .resetEstadosAndSetEstadoIndex(index, true, false);
-                });
-              },
-              style: ButtonStyle(
-                backgroundColor:
-                    hasValidAlternativaAtIndex(alternativas, index) &&
-                            alternativas[index].estado
-                        ? MaterialStateProperty.all<Color>(secondaryColor)
-                        : MaterialStateProperty.all<Color>(primaryColor),
+                        Future.delayed(const Duration(milliseconds: 30), () {
+                          ref
+                              .read(atividadeAlternativa.notifier)
+                              .resetEstadosAndSetEstadoIndex(i, estado: true, allEstados: false);
+                        });
+                      },
+                      style: ButtonStyle(
+                        backgroundColor: hasValidAlternativaAtIndex(
+                                    alternativas, i) &&
+                                alternativas[i].estado
+                            ? MaterialStateProperty.all<Color>(secondaryColor)
+                            : MaterialStateProperty.all<Color>(primaryColor),
+                      ),
+                      child: Text(
+                        hasValidAlternativaAtIndex(alternativas, i)
+                            ? (alternativas[i].itemAtividade as Alternativa)
+                                .descricao
+                            : '',
+                        style: TextStyle(
+                            color:
+                                hasValidAlternativaAtIndex(alternativas, i) &&
+                                        alternativas[i].estado
+                                    ? primaryColor
+                                    : secondaryColor),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-              child: Text(
-                hasValidAlternativaAtIndex(alternativas, index)
-                    ? (alternativas[index].itemAtividade as Alternativa)
-                        .descricao
-                    : '',
-                style: TextStyle(
-                    color: hasValidAlternativaAtIndex(alternativas, index) &&
-                            alternativas[index].estado
-                        ? primaryColor
-                        : secondaryColor),
-              ),
-            ),
-          ),
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            childAspectRatio: 7 / 1,
-            crossAxisCount: 1,
-            mainAxisSpacing: 10,
-            crossAxisSpacing: 20,
-          ),
+          ],
         ),
       ),
     );

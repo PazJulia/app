@@ -43,6 +43,8 @@ class Pratica extends ConsumerWidget {
         title: LinearPercentIndicator(
           lineHeight: 20,
           percent: percentActivity,
+          animation: true,
+          animationDuration: 300,
           center: Text(
             formatDoubleToFractionToText(
                 totalAtividades, ref.watch(porcentagemAtividadeConcluida)),
@@ -78,7 +80,7 @@ class Pratica extends ConsumerWidget {
                 child: Column(
                   children: [
                     Container(
-                      padding: const EdgeInsets.only(bottom: 20),
+                      padding: const EdgeInsets.only(bottom: 5),
                       child: Column(
                         children: [
                           Text(

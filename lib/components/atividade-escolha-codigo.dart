@@ -6,11 +6,10 @@ import '../screens/pratica.dart';
 import '../shared/values/colors.dart';
 import '../state-notifier/atividade-notifier.dart';
 
-final atividadeCodigoProvider = StateNotifierProvider.autoDispose<
-    AtividadeNotifier,
-    List<Atividade>>((ref) => AtividadeNotifier());
-final respostaAtividadeCodigo =
-    StateProvider.autoDispose<List<String>>((ref) => []);
+final atividadeCodigoProvider =
+    StateNotifierProvider.autoDispose<AtividadeNotifier, List<Atividade>>(
+        (ref) => AtividadeNotifier());
+final respostaCodigo = StateProvider.autoDispose<List<String>>((ref) => []);
 
 class AtividadeEscolhaCodigo extends ConsumerWidget {
   const AtividadeEscolhaCodigo(this.codes, {super.key});
@@ -20,7 +19,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     List<Atividade> codigosList = ref.watch(atividadeCodigoProvider);
-    List<String> resposta = ref.watch(respostaAtividadeCodigo);
+    List<String> resposta = ref.watch(respostaCodigo);
 
     return Padding(
       padding: const EdgeInsets.all(10),
@@ -51,9 +50,8 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                       ref
                           .read(atividadeCodigoProvider.notifier)
                           .setActivity(codes, true);
-                      ref.read(respostaAtividadeCodigo.notifier).state = [];
-                      ref.read(isAtividadeEmptyNotifier.notifier).state =
-                      true;
+                      ref.read(respostaCodigo.notifier).state = [];
+                      ref.read(isAtividadeEmptyNotifier.notifier).state = true;
                     },
                     color: secondaryColor,
                     icon: const Icon(
@@ -79,17 +77,24 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                         onPressed: (codigosList[index].estado == false)
                             ? null
                             : () {
-                                ref
-                                    .read(atividadeCodigoProvider.notifier)
-                                    .changeEstado(index, false);
+                                if (ref.watch(isAtividadeEmptyNotifier)) {
+                                  ref
+                                      .read(isAtividadeEmptyNotifier.notifier)
+                                      .state = false;
+                                }
+                                Future.delayed(const Duration(milliseconds: 30),
+                                    () {
+                                  ref
+                                      .read(atividadeCodigoProvider.notifier)
+                                      .changeEstado(index, false);
 
-                                resposta.add((codigosList[index].itemAtividade as Comando).nome);
-
-                                ref
-                                    .read(respostaAtividadeCodigo.notifier)
-                                    .state = [...resposta];
-                                ref.read(isAtividadeEmptyNotifier.notifier).state =
-                                    false;
+                                  resposta.add((codigosList[index].itemAtividade
+                                          as Comando)
+                                      .nome);
+                                  ref.read(respostaCodigo.notifier).state = [
+                                    ...resposta
+                                  ];
+                                });
                               },
                         style: ButtonStyle(
                           backgroundColor: codigosList[index].estado == true
