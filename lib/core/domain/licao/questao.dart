@@ -1,5 +1,7 @@
 import 'package:app/core/domain/licao/alternativa.dart';
-import 'package:app/core/domain/licao/comando.dart';
+import 'package:app/core/domain/licao/sequencia.dart';
+
+import '../model/tipo-atividade.dart';
 
 class Questao {
   int id;
@@ -7,7 +9,7 @@ class Questao {
   String pergunta;
   String tipo;
   List<Alternativa>? alternativas;
-  List<Comando>? comandos;
+  List<Sequencia>? sequencias;
 
   Questao({
     required this.id,
@@ -15,7 +17,7 @@ class Questao {
     required this.pergunta,
     required this.tipo,
     this.alternativas,
-    this.comandos,
+    this.sequencias,
   });
 
   factory Questao.fromJson(Map<String, dynamic> json) {
@@ -26,24 +28,24 @@ class Questao {
       pergunta: json['pergunta'],
       tipo: json['tipo'],
       alternativas: result?[0] as List<Alternativa>?,
-      comandos: result?[1] as List<Comando>?,
+      sequencias: result?[1] as List<Sequencia>?,
     );
   }
 
   static List<Object?>? mapQuestaoPorTipo(Map<String, dynamic> json) {
-    if (json['tipo'] == 'PerguntaResposta') {
+    if (json['tipo'] == TipoAtividade.perguntaResposta.name) {
       var alternativas = json['alternativas'] as List?;
       if (alternativas != null) {
         List<Alternativa> alternativaList =
         alternativas.map((e) => Alternativa.fromJson(e)).toList();
         return [alternativaList, null];
       }
-    } else if (json['tipo'] == 'Programacao') {
-      var comandos = json['comandos'] as List?;
-      if (comandos != null) {
-        List<Comando> comandoList =
-        comandos.map((e) => Comando.fromJson(e)).toList();
-        return [null, comandoList];
+    } else if (json['tipo'] == TipoAtividade.programacao.name) {
+      var sequencias = json['sequencias'] as List?;
+      if (sequencias != null) {
+        List<Sequencia> sequenciasList =
+        sequencias.map((e) => Sequencia.fromJson(e)).toList();
+        return [null, sequenciasList];
       }
     }
     return null;

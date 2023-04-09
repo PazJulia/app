@@ -1,0 +1,4 @@
+enum TipoAtividade {
+  perguntaResposta,
+  programacao,
+}

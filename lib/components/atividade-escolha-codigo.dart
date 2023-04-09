@@ -1,7 +1,7 @@
 import 'package:app/core/domain/model/atividade.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../core/domain/licao/comando.dart';
+import '../core/domain/licao/sequencia.dart';
 import '../screens/pratica.dart';
 import '../shared/values/colors.dart';
 import '../state-notifier/atividade-notifier.dart';
@@ -14,7 +14,7 @@ final respostaCodigo = StateProvider.autoDispose<List<String>>((ref) => []);
 class AtividadeEscolhaCodigo extends ConsumerWidget {
   const AtividadeEscolhaCodigo(this.codes, {super.key});
 
-  final List<Comando> codes;
+  final List<Sequencia> codes;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -89,7 +89,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                                       .changeEstado(index, false);
 
                                   resposta.add((codigosList[index].itemAtividade
-                                          as Comando)
+                                          as Sequencia)
                                       .nome);
                                   ref.read(respostaCodigo.notifier).state = [
                                     ...resposta
@@ -102,7 +102,7 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                               : MaterialStateProperty.all<Color>(fifthColor),
                         ),
                         child: Text(
-                          (codigosList[index].itemAtividade as Comando).nome,
+                          (codigosList[index].itemAtividade as Sequencia).nome,
                           style: TextStyle(
                               color: codigosList[index].estado == true
                                   ? primaryColor

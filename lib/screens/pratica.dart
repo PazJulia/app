@@ -2,34 +2,35 @@ import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-alternativa.dart';
 import 'package:app/core/domain/licao/alternativa.dart';
 import 'package:app/core/domain/licao/questao.dart';
+import 'package:app/core/domain/model/tipo-atividade.dart';
 import 'package:app/shared/functions/convertToFraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter/services.dart';
 
-import '../core/domain/licao/comando.dart';
+import '../core/domain/licao/sequencia.dart';
 import '../shared/values/colors.dart';
 
-final porcentagemAtividadeConcluida =
-    StateProvider.autoDispose<double>((ref) => 0.0);
+final porcentagem = StateProvider.autoDispose<double>((ref) => 0.0);
 
 final isAtividadeEmptyNotifier = StateProvider.autoDispose((ref) => true);
-final activityIndexNotifier = StateProvider.autoDispose((ref) => 0);
+final indexNotifier = StateProvider.autoDispose((ref) => 0);
+final isLoadingNotifier = StateProvider.autoDispose((ref) => false);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
-
-  static const int totalAtividades = 2;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final questoes =
         ModalRoute.of(context)?.settings.arguments as List<Questao>?;
+    int? total = questoes?.length;
 
     bool isAtividadeEmpty = ref.watch(isAtividadeEmptyNotifier);
-    int atividadeIndex = ref.watch(activityIndexNotifier);
-    double percentActivity = ref.watch(porcentagemAtividadeConcluida);
+    int index = ref.watch(indexNotifier);
+    double percent = ref.watch(porcentagem);
+    bool isLoading = ref.watch(isLoadingNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -42,12 +43,11 @@ class Pratica extends ConsumerWidget {
         backgroundColor: fifthColor,
         title: LinearPercentIndicator(
           lineHeight: 20,
-          percent: percentActivity,
+          percent: percent,
           animation: true,
           animationDuration: 300,
           center: Text(
-            formatDoubleToFractionToText(
-                totalAtividades, ref.watch(porcentagemAtividadeConcluida)),
+            formatDoubleToFractionToText(total!, ref.watch(porcentagem)),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           barRadius: const Radius.circular(16),
@@ -84,7 +84,7 @@ class Pratica extends ConsumerWidget {
                       child: Column(
                         children: [
                           Text(
-                            questoes![atividadeIndex].textoInicial,
+                            questoes![index].textoInicial,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 18),
                           ),
@@ -92,7 +92,7 @@ class Pratica extends ConsumerWidget {
                             height: 10,
                           ),
                           Text(
-                            questoes[atividadeIndex].pergunta,
+                            questoes[index].pergunta,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                                 fontSize: 18, fontWeight: FontWeight.bold),
@@ -100,42 +100,67 @@ class Pratica extends ConsumerWidget {
                         ],
                       ),
                     ),
-                    if (questoes[atividadeIndex].tipo == 'PerguntaResposta')
-                      initiateAtividadeEscolhaComandosWidget(questoes[atividadeIndex].alternativas, ref)
-                    else if (questoes[atividadeIndex].tipo == 'Programacao')
-                      initiateAtividadeEscolhaCodigoWidget(questoes[atividadeIndex].comandos, ref)
+                    buildAtividadeWidget(questoes, index, ref),
                   ],
                 ),
               ),
             ),
-            SizedBox(
-              height: 60,
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: isAtividadeEmpty == true
-                    ? null
-                    : () {
-                        initiateNextActivity(ref, atividadeIndex);
-                      },
-                style: ElevatedButton.styleFrom(
-                  shape: const BeveledRectangleBorder(),
-                  backgroundColor: thirdColor,
-                  shadowColor: Colors.transparent,
-                  disabledBackgroundColor: primaryColor,
-                ),
-                child: const Text(
-                  'VERIFICAR',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-            ),
+            buildBottomWidget(isAtividadeEmpty, ref, index, total, questoes),
           ],
         ),
       ),
     );
   }
 
-  initiateAtividadeEscolhaCodigoWidget(List<Comando>? list, WidgetRef ref) {
+  Widget buildAtividadeWidget(
+      List<Questao>? questoes, int index, WidgetRef ref) {
+    if (questoes?[index].tipo == TipoAtividade.perguntaResposta.name) {
+      return initiateAtividadeSequenciaWidget(
+          questoes?[index].alternativas, ref);
+    } else if (questoes?[index].tipo == TipoAtividade.programacao.name) {
+      return initiateAtividadeEscolhaCodigoWidget(
+          questoes?[index].sequencias, ref);
+    }
+    return const SizedBox();
+  }
+
+  Widget buildBottomWidget(
+    bool isAtividadeEmpty,
+    WidgetRef ref,
+    int index,
+    int total,
+    List<Questao> questoes,
+  ) {
+    var isLoading = ref.watch(isLoadingNotifier);
+    return SizedBox(
+      height: 60,
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: isAtividadeEmpty == true
+            ? null
+            : () {
+                verifyAnswer(ref, questoes, index);
+                //initiateNextActivity(ref, atividadeIndex, total);
+              },
+        style: ElevatedButton.styleFrom(
+          shape: const BeveledRectangleBorder(),
+          backgroundColor: thirdColor,
+          shadowColor: Colors.transparent,
+          disabledBackgroundColor: primaryColor,
+        ),
+        child: isLoading
+            ? CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(primaryColor),
+              )
+            : const Text(
+                'VERIFICAR',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+      ),
+    );
+  }
+
+  initiateAtividadeEscolhaCodigoWidget(List<Sequencia>? list, WidgetRef ref) {
     Future(() {
       ref.read(atividadeCodigoProvider.notifier).setActivity(list!, true);
     });
@@ -143,7 +168,7 @@ class Pratica extends ConsumerWidget {
     return AtividadeEscolhaCodigo(list!);
   }
 
-  initiateAtividadeEscolhaComandosWidget(List<Alternativa>? list, WidgetRef ref) {
+  initiateAtividadeSequenciaWidget(List<Alternativa>? list, WidgetRef ref) {
     Future(() {
       ref.read(atividadeAlternativa.notifier).setActivity(list!, false);
     });
@@ -151,13 +176,24 @@ class Pratica extends ConsumerWidget {
     return const AtividadeAlternativa();
   }
 
-  initiateNextActivity(WidgetRef ref, int atividadeIndex) {
-    ref.read(porcentagemAtividadeConcluida.notifier).state =
-        getPercentageOfOneFromTotal(totalAtividades) +
-            ref.watch(porcentagemAtividadeConcluida);
-    ref.read(activityIndexNotifier.notifier).state = atividadeIndex + 1;
+  verifyAnswer(WidgetRef ref, questoes, int index) async {
+    setLoading(ref, true);
+    await Future.delayed(const Duration(milliseconds: 500));
+    initiateNextActivity(ref, index, questoes.length);
+    setLoading(ref, false);
+  }
+
+  setLoading(WidgetRef ref, bool isLoading) {
+    ref.read(isLoadingNotifier.notifier).state = isLoading;
+  }
+
+  initiateNextActivity(WidgetRef ref, int index, int total) {
+    ref.read(porcentagem.notifier).state =
+        getPercentageOfOneFromTotal(total) + ref.watch(porcentagem);
+    ref.read(indexNotifier.notifier).state = index + 1;
     if (ref.watch(isAtividadeEmptyNotifier) == false) {
       ref.read(isAtividadeEmptyNotifier.notifier).state = true;
     }
+    setLoading(ref, false);
   }
 }
