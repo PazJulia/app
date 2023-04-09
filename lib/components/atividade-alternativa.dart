@@ -7,7 +7,7 @@ import 'package:app/core/domain/model/atividade.dart';
 import '../screens/pratica.dart';
 import '../state-notifier/atividade-notifier.dart';
 
-final atividadeAlternativa =
+final alternativa =
     StateNotifierProvider.autoDispose<AtividadeNotifier, List<Atividade>>(
         (ref) => AtividadeNotifier());
 
@@ -21,7 +21,7 @@ class AtividadeAlternativa extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final alternativas = ref.watch(atividadeAlternativa);
+    final alternativas = ref.watch(alternativa);
     return Expanded(
       child: Container(
         padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
@@ -43,7 +43,7 @@ class AtividadeAlternativa extends ConsumerWidget {
 
                         Future.delayed(const Duration(milliseconds: 30), () {
                           ref
-                              .read(atividadeAlternativa.notifier)
+                              .read(alternativa.notifier)
                               .resetEstadosAndSetEstadoIndex(i, estado: true, allEstados: false);
                         });
                       },

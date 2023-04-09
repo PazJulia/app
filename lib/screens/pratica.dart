@@ -1,3 +1,4 @@
+import 'package:app/components/alert.dart';
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-alternativa.dart';
 import 'package:app/core/domain/licao/alternativa.dart';
@@ -17,6 +18,8 @@ final porcentagem = StateProvider.autoDispose<double>((ref) => 0.0);
 final isAtividadeEmptyNotifier = StateProvider.autoDispose((ref) => true);
 final indexNotifier = StateProvider.autoDispose((ref) => 0);
 final isLoadingNotifier = StateProvider.autoDispose((ref) => false);
+final isCorrectNotifier = StateProvider.autoDispose((ref) => false);
+final isAnswerVerifiedNotifier = StateProvider.autoDispose((ref) => false);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
@@ -30,7 +33,6 @@ class Pratica extends ConsumerWidget {
     bool isAtividadeEmpty = ref.watch(isAtividadeEmptyNotifier);
     int index = ref.watch(indexNotifier);
     double percent = ref.watch(porcentagem);
-    bool isLoading = ref.watch(isLoadingNotifier);
 
     return Scaffold(
       appBar: AppBar(
@@ -105,7 +107,13 @@ class Pratica extends ConsumerWidget {
                 ),
               ),
             ),
-            buildBottomWidget(isAtividadeEmpty, ref, index, total, questoes),
+            Stack(
+              children: [
+                buildBottomWidget(isAtividadeEmpty, ref, index, total, questoes),
+                buildAnswerWidget(ref, index, total),
+              ],
+            )
+            //buildBottomWidget(isAtividadeEmpty, ref, index, total, questoes),
           ],
         ),
       ),
@@ -160,6 +168,37 @@ class Pratica extends ConsumerWidget {
     );
   }
 
+  Widget buildAnswerWidget(WidgetRef ref, int index, int total) {
+    var isCorrect = ref.watch(isCorrectNotifier);
+    var isAnswerVerified = ref.watch(isAnswerVerifiedNotifier);
+    return Visibility(
+      visible: isAnswerVerified,
+      child: SizedBox(
+        height: 100,
+        width: double.infinity,
+        child: Container(
+          color: isCorrect ? Colors.green[100] : Colors.red[100],
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  isCorrect ? 'Resposta correta' : 'Resposta incorreta',
+                  style: TextStyle(
+                      color: isCorrect ? Colors.green : Colors.red,
+                      fontWeight: FontWeight.bold),
+                ),
+                IconButton(
+                    onPressed: () => {initiateNextActivity(ref, index, total)},
+                    icon: const Icon(Icons.arrow_forward_rounded))
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
   initiateAtividadeEscolhaCodigoWidget(List<Sequencia>? list, WidgetRef ref) {
     Future(() {
       ref.read(atividadeCodigoProvider.notifier).setActivity(list!, true);
@@ -170,7 +209,7 @@ class Pratica extends ConsumerWidget {
 
   initiateAtividadeSequenciaWidget(List<Alternativa>? list, WidgetRef ref) {
     Future(() {
-      ref.read(atividadeAlternativa.notifier).setActivity(list!, false);
+      ref.read(alternativa.notifier).setActivity(list!, false);
     });
 
     return const AtividadeAlternativa();
@@ -178,8 +217,22 @@ class Pratica extends ConsumerWidget {
 
   verifyAnswer(WidgetRef ref, questoes, int index) async {
     setLoading(ref, true);
+    if (questoes[index].tipo == TipoAtividade.perguntaResposta.name) {
+      var selected = ref
+          .watch(alternativa)
+          .firstWhere((element) => element.estado == true);
+      if (selected.itemAtividade.verdadeira) {
+        ref.read(isAnswerVerifiedNotifier.notifier).state = true;
+        ref.read(isCorrectNotifier.notifier).state = true;
+      } else {
+        ref.read(isAnswerVerifiedNotifier.notifier).state = true;
+        ref.read(isCorrectNotifier.notifier).state = false;
+      }
+    } else if (questoes[index].tipo == TipoAtividade.programacao.name) {
+      //
+    }
     await Future.delayed(const Duration(milliseconds: 500));
-    initiateNextActivity(ref, index, questoes.length);
+    //initiateNextActivity(ref, index, questoes.length);
     setLoading(ref, false);
   }
 
@@ -191,9 +244,7 @@ class Pratica extends ConsumerWidget {
     ref.read(porcentagem.notifier).state =
         getPercentageOfOneFromTotal(total) + ref.watch(porcentagem);
     ref.read(indexNotifier.notifier).state = index + 1;
-    if (ref.watch(isAtividadeEmptyNotifier) == false) {
-      ref.read(isAtividadeEmptyNotifier.notifier).state = true;
-    }
+    ref.read(isAtividadeEmptyNotifier.notifier).state = true;
     setLoading(ref, false);
   }
 }
