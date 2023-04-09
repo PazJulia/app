@@ -35,18 +35,20 @@ class AtividadeAlternativa extends ConsumerWidget {
                     height: 50,
                     width: 300,
                     child: ElevatedButton(
-                      onPressed: () {
-                        if (ref.watch(isAtividadeEmptyNotifier)) {
-                          ref.read(isAtividadeEmptyNotifier.notifier).state =
-                              false;
-                        }
-
-                        Future.delayed(const Duration(milliseconds: 30), () {
-                          ref
-                              .read(alternativa.notifier)
-                              .resetEstadosAndSetEstadoIndex(i, estado: true, allEstados: false);
-                        });
-                      },
+                      onPressed: ref.watch(isAnswerVerifiedNotifier)
+                          ? null
+                          : () {
+                              ref
+                                  .read(isAtividadeEmptyNotifier.notifier)
+                                  .state = false;
+                              Future.delayed(const Duration(milliseconds: 30),
+                                  () {
+                                ref
+                                    .read(alternativa.notifier)
+                                    .resetEstadosAndSetEstadoIndex(i,
+                                        estado: true, allEstados: false);
+                              });
+                            },
                       style: ButtonStyle(
                         backgroundColor: hasValidAlternativaAtIndex(
                                     alternativas, i) &&

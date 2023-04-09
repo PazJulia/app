@@ -1,4 +1,3 @@
-import 'package:app/components/alert.dart';
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-alternativa.dart';
 import 'package:app/core/domain/licao/alternativa.dart';
@@ -109,7 +108,8 @@ class Pratica extends ConsumerWidget {
             ),
             Stack(
               children: [
-                buildBottomWidget(isAtividadeEmpty, ref, index, total, questoes),
+                buildBottomWidget(
+                    isAtividadeEmpty, ref, index, total, questoes),
                 buildAnswerWidget(ref, index, total),
               ],
             )
@@ -148,7 +148,6 @@ class Pratica extends ConsumerWidget {
             ? null
             : () {
                 verifyAnswer(ref, questoes, index);
-                //initiateNextActivity(ref, atividadeIndex, total);
               },
         style: ElevatedButton.styleFrom(
           shape: const BeveledRectangleBorder(),
@@ -189,7 +188,15 @@ class Pratica extends ConsumerWidget {
                       fontWeight: FontWeight.bold),
                 ),
                 IconButton(
-                    onPressed: () => {initiateNextActivity(ref, index, total)},
+                    onPressed: () => {
+                      if (index + 1 < total)
+                        {
+                          initiateNextActivity(ref, index, total),
+                          ref
+                              .read(isAnswerVerifiedNotifier.notifier)
+                              .state = false
+                        }
+                    },
                     icon: const Icon(Icons.arrow_forward_rounded))
               ],
             ),
@@ -201,7 +208,9 @@ class Pratica extends ConsumerWidget {
 
   initiateAtividadeEscolhaCodigoWidget(List<Sequencia>? list, WidgetRef ref) {
     Future(() {
-      ref.read(atividadeCodigoProvider.notifier).setActivity(list!, true);
+      if (!ref.watch(isAnswerVerifiedNotifier)) {
+        ref.read(atividadeCodigoProvider.notifier).setActivity(list!, true);
+      }
     });
 
     return AtividadeEscolhaCodigo(list!);
@@ -209,32 +218,39 @@ class Pratica extends ConsumerWidget {
 
   initiateAtividadeSequenciaWidget(List<Alternativa>? list, WidgetRef ref) {
     Future(() {
-      ref.read(alternativa.notifier).setActivity(list!, false);
+      if (!ref.watch(isAnswerVerifiedNotifier)) {
+        ref.read(alternativa.notifier).setActivity(list!, false);
+      }
     });
 
     return const AtividadeAlternativa();
   }
 
-  verifyAnswer(WidgetRef ref, questoes, int index) async {
+  verifyAnswer(WidgetRef ref, List<Questao> questoes, int index) async {
     setLoading(ref, true);
     if (questoes[index].tipo == TipoAtividade.perguntaResposta.name) {
-      var selected = ref
-          .watch(alternativa)
-          .firstWhere((element) => element.estado == true);
-      if (selected.itemAtividade.verdadeira) {
-        ref.read(isAnswerVerifiedNotifier.notifier).state = true;
-        ref.read(isCorrectNotifier.notifier).state = true;
-      } else {
-        ref.read(isAnswerVerifiedNotifier.notifier).state = true;
-        ref.read(isCorrectNotifier.notifier).state = false;
-      }
+      verifyAlternativa(ref, questoes, index);
     } else if (questoes[index].tipo == TipoAtividade.programacao.name) {
-      //
+      verifySequencia(ref, questoes, index);
     }
     await Future.delayed(const Duration(milliseconds: 500));
-    //initiateNextActivity(ref, index, questoes.length);
     setLoading(ref, false);
   }
+
+  verifyAlternativa(WidgetRef ref, List<Questao> questoes, int index) {
+    //final selected = ref.watch(alternativa).firstWhere((element) => element.estado == true);
+    final alternativas = ref.watch(alternativa);
+    final selected = alternativas.firstWhere((element) => element.estado == true);
+    if (selected.itemAtividade.verdadeira) {
+      ref.read(isAnswerVerifiedNotifier.notifier).state = true;
+      ref.read(isCorrectNotifier.notifier).state = true;
+    } else {
+      ref.read(isAnswerVerifiedNotifier.notifier).state = true;
+      ref.read(isCorrectNotifier.notifier).state = false;
+    }
+  }
+
+  verifySequencia(WidgetRef ref, questoes, int index) {}
 
   setLoading(WidgetRef ref, bool isLoading) {
     ref.read(isLoadingNotifier.notifier).state = isLoading;
@@ -245,6 +261,5 @@ class Pratica extends ConsumerWidget {
         getPercentageOfOneFromTotal(total) + ref.watch(porcentagem);
     ref.read(indexNotifier.notifier).state = index + 1;
     ref.read(isAtividadeEmptyNotifier.notifier).state = true;
-    setLoading(ref, false);
   }
 }
