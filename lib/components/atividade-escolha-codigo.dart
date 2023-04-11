@@ -46,13 +46,16 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                   alignment: Alignment.bottomRight,
                   child: IconButton(
                     iconSize: 30,
-                    onPressed: () {
-                      ref
-                          .read(atividadeCodigoProvider.notifier)
-                          .setActivity(codes, true);
-                      ref.read(respostaCodigo.notifier).state = [];
-                      ref.read(isAtividadeEmptyNotifier.notifier).state = true;
-                    },
+                    onPressed: ref.watch(isAnswerVerifiedNotifier)
+                        ? null
+                        : () {
+                            ref
+                                .read(atividadeCodigoProvider.notifier)
+                                .setActivity(codes, true);
+                            ref.read(respostaCodigo.notifier).state = [];
+                            ref.read(isAtividadeEmptyNotifier.notifier).state =
+                                true;
+                          },
                     color: secondaryColor,
                     icon: const Icon(
                       Icons.delete_outline_rounded,
@@ -74,7 +77,8 @@ class AtividadeEscolhaCodigo extends ConsumerWidget {
                     child: SizedBox(
                       height: 35,
                       child: ElevatedButton(
-                        onPressed: (codigosList[index].estado == false)
+                        onPressed: (codigosList[index].estado == false) ||
+                                ref.watch(isAnswerVerifiedNotifier)
                             ? null
                             : () {
                                 if (ref.watch(isAtividadeEmptyNotifier)) {

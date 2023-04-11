@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-alternativa.dart';
 import 'package:app/core/domain/licao/alternativa.dart';
@@ -19,6 +20,7 @@ final indexNotifier = StateProvider.autoDispose((ref) => 0);
 final isLoadingNotifier = StateProvider.autoDispose((ref) => false);
 final isCorrectNotifier = StateProvider.autoDispose((ref) => false);
 final isAnswerVerifiedNotifier = StateProvider.autoDispose((ref) => false);
+final scoreNotifier = StateProvider.autoDispose((ref) => 0);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
@@ -112,8 +114,7 @@ class Pratica extends ConsumerWidget {
                     isAtividadeEmpty, ref, index, total, questoes),
                 buildAnswerWidget(ref, index, total),
               ],
-            )
-            //buildBottomWidget(isAtividadeEmpty, ref, index, total, questoes),
+            ),
           ],
         ),
       ),
@@ -189,14 +190,14 @@ class Pratica extends ConsumerWidget {
                 ),
                 IconButton(
                     onPressed: () => {
-                      if (index + 1 < total)
-                        {
-                          initiateNextActivity(ref, index, total),
-                          ref
-                              .read(isAnswerVerifiedNotifier.notifier)
-                              .state = false
-                        }
-                    },
+                          if (index + 1 < total)
+                            {
+                              initiateNextActivity(ref, index, total),
+                              ref
+                                  .read(isAnswerVerifiedNotifier.notifier)
+                                  .state = false
+                            }
+                        },
                     icon: const Icon(Icons.arrow_forward_rounded))
               ],
             ),
@@ -238,19 +239,32 @@ class Pratica extends ConsumerWidget {
   }
 
   verifyAlternativa(WidgetRef ref, List<Questao> questoes, int index) {
-    //final selected = ref.watch(alternativa).firstWhere((element) => element.estado == true);
     final alternativas = ref.watch(alternativa);
-    final selected = alternativas.firstWhere((element) => element.estado == true);
-    if (selected.itemAtividade.verdadeira) {
-      ref.read(isAnswerVerifiedNotifier.notifier).state = true;
+    final selected =
+        alternativas.firstWhere((element) => element.estado == true);
+    setAnswerStates(ref, selected.itemAtividade.verdadeira);
+  }
+
+  verifySequencia(WidgetRef ref, questoes, int index) {
+    final sequencias = ref.watch(respostaCodigo);
+    final questaoMap = questoes[index].sequencias.map((e) => e.nome).toList();
+    Function deepEq = const DeepCollectionEquality().equals;
+    setAnswerStates(ref, deepEq(sequencias, questaoMap));
+  }
+
+  setAnswerStates(WidgetRef ref, bool isCorrect/* bool answerVerified, bool isCorrect*/) {
+    ref.read(isAnswerVerifiedNotifier.notifier).state = true;
+    if (isCorrect) {
       ref.read(isCorrectNotifier.notifier).state = true;
+      incrementScore(ref);
     } else {
-      ref.read(isAnswerVerifiedNotifier.notifier).state = true;
       ref.read(isCorrectNotifier.notifier).state = false;
     }
   }
 
-  verifySequencia(WidgetRef ref, questoes, int index) {}
+  incrementScore(WidgetRef ref) {
+    ref.read(scoreNotifier.notifier).state = ref.watch(scoreNotifier) + 1;
+  }
 
   setLoading(WidgetRef ref, bool isLoading) {
     ref.read(isLoadingNotifier.notifier).state = isLoading;
