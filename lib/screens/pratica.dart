@@ -4,7 +4,7 @@ import 'package:app/components/atividade-alternativa.dart';
 import 'package:app/core/domain/licao/alternativa.dart';
 import 'package:app/core/domain/licao/questao.dart';
 import 'package:app/core/domain/model/tipo-atividade.dart';
-import 'package:app/shared/functions/convertToFraction.dart';
+import 'package:app/shared/functions/convert-to-fraction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';

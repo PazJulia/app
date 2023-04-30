@@ -34,7 +34,6 @@ class Explicacao extends StatelessWidget {
               licaoNome,
               style: TextStyle(color: secondaryColor),
             ),
-            const StarsRating(),
           ],
         ),
         actions: [

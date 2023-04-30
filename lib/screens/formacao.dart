@@ -3,7 +3,7 @@ import 'package:app/core/domain/modulo/modulos.dart';
 import 'package:flutter/material.dart';
 
 import '../components/lessons-timeline.dart';
-import '../shared/functions/convertColor.dart';
+import '../shared/functions/convert-color.dart';
 
 class FormacaoCards extends StatelessWidget {
   const FormacaoCards({super.key});

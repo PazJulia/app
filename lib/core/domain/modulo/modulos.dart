@@ -1,3 +1,5 @@
+import 'package:app/core/domain/estrela/estrela.dart';
+
 class Modulos {
   late int id;
   late String nome;
@@ -25,9 +27,7 @@ class Modulos {
     data['id'] = id;
     data['nome'] = nome;
     data['descricao'] = descricao;
-    if (licoes != null) {
-      data['licoes'] = licoes.map((v) => v.toJson()).toList();
-    }
+    data['licoes'] = licoes.map((v) => v.toJson()).toList();
     data['cor'] = cor;
     return data;
   }
@@ -36,18 +36,29 @@ class Modulos {
 class Licoes {
   late int id;
   late String nome;
+  late bool licaoIniciada;
+  Estrela? estrela;
 
-  Licoes({required this.id, required this.nome});
+  Licoes({
+    required this.id,
+    required this.nome,
+    required this.licaoIniciada,
+    this.estrela,
+  });
 
   Licoes.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     nome = json['nome'];
+    licaoIniciada = json['licaoIniciada'];
+    estrela = json['estrela'] != null ? Estrela.fromJson(json['estrela']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['nome'] = nome;
+    data['licaoIniciada'] = licaoIniciada;
+    data['estrela'] = estrela != null ? estrela!.toJson() : null;
     return data;
   }
 }

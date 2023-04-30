@@ -3,10 +3,9 @@ import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:app/shared/values/api-path.dart';
 
 class ApiService {
-  String apiPath = 'http://10.0.0.106:8080/';
-
   dynamic get(String url, [Map<String, String> params = const {} ]) async {
     var prefs = await SharedPreferences.getInstance();
 

@@ -33,7 +33,7 @@ class LessonsTimeline extends StatelessWidget {
                           color: Colors.black,
                         ),
                       ),
-                      StarsRating(),
+                      StarsRating(estrela: licao.estrela),
                     ],
                   ),
                 ),

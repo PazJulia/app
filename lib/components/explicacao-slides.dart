@@ -1,4 +1,4 @@
-import 'package:app/shared/functions/convertColor.dart';
+import 'package:app/shared/functions/convert-color.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 
