@@ -25,14 +25,14 @@ class ApiService {
     return await json.decode(utf8.decode(response.bodyBytes));
   }
 
-  dynamic post(String url, Map id, [Map<String, String> params = const {}]) async {
+  dynamic post(String url, Map body, [Map<String, String> params = const {}]) async {
     var prefs = await SharedPreferences.getInstance();
 
     String authorization = (prefs.getString("authorization") ?? "");
 
     final headers = {'accept': '*/*', 'Content-Type': 'application/json'};
 
-    var _body = json.encode(id);
+    var _body = json.encode(body);
     print("json enviado : $_body");
 
     var response =

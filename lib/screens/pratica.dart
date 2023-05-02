@@ -148,7 +148,7 @@ class Pratica extends ConsumerWidget {
         onPressed: isAtividadeEmpty == true
             ? null
             : () {
-                verifyAnswer(ref, questoes, index);
+                verifyAnswer(ref, questoes, index, total);
               },
         style: ElevatedButton.styleFrom(
           shape: const BeveledRectangleBorder(),
@@ -192,7 +192,7 @@ class Pratica extends ConsumerWidget {
                     onPressed: () => {
                           if (index + 1 < total)
                             {
-                              initiateNextActivity(ref, index, total),
+                              initiateNextActivity(ref, index),
                               ref
                                   .read(isAnswerVerifiedNotifier.notifier)
                                   .state = false
@@ -227,13 +227,15 @@ class Pratica extends ConsumerWidget {
     return const AtividadeAlternativa();
   }
 
-  verifyAnswer(WidgetRef ref, List<Questao> questoes, int index) async {
+  verifyAnswer(WidgetRef ref, List<Questao> questoes, int index, int total) async {
     setLoading(ref, true);
     if (questoes[index].tipo == TipoAtividade.perguntaResposta.name) {
       verifyAlternativa(ref, questoes, index);
     } else if (questoes[index].tipo == TipoAtividade.programacao.name) {
       verifySequencia(ref, questoes, index);
     }
+    ref.read(porcentagem.notifier).state =
+        getPercentageOfOneFromTotal(total) + ref.watch(porcentagem);
     await Future.delayed(const Duration(milliseconds: 500));
     setLoading(ref, false);
   }
@@ -270,9 +272,7 @@ class Pratica extends ConsumerWidget {
     ref.read(isLoadingNotifier.notifier).state = isLoading;
   }
 
-  initiateNextActivity(WidgetRef ref, int index, int total) {
-    ref.read(porcentagem.notifier).state =
-        getPercentageOfOneFromTotal(total) + ref.watch(porcentagem);
+  initiateNextActivity(WidgetRef ref, int index) {
     ref.read(indexNotifier.notifier).state = index + 1;
     ref.read(isAtividadeEmptyNotifier.notifier).state = true;
   }
