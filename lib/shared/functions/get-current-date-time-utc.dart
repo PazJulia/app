@@ -1,3 +1,3 @@
 String getCurrentDateTimeUtc() {
-  return DateTime.now().toUtc().toString();
+  return DateTime.now().toUtc().toIso8601String();
 }

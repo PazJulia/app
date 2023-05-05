@@ -1,3 +1,5 @@
+import 'package:app/core/domain/extrato-licao/extrato-licao.dart';
+import 'package:app/core/domain/licao/licao.dart';
 import 'package:collection/collection.dart';
 import 'package:app/components/atividade-escolha-codigo.dart';
 import 'package:app/components/atividade-alternativa.dart';
@@ -11,6 +13,7 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter/services.dart';
 
 import '../core/domain/licao/sequencia.dart';
+import '../shared/functions/get-current-date-time-utc.dart';
 import '../shared/values/colors.dart';
 
 final porcentagem = StateProvider.autoDispose<double>((ref) => 0.0);
@@ -27,9 +30,10 @@ class Pratica extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final questoes =
-        ModalRoute.of(context)?.settings.arguments as List<Questao>?;
-    int? total = questoes?.length;
+    final licao = ModalRoute.of(context)?.settings.arguments as Licao;
+    final questoes = licao.questoes;
+
+    int? total = questoes.length;
 
     bool isAtividadeEmpty = ref.watch(isAtividadeEmptyNotifier);
     int index = ref.watch(indexNotifier);
@@ -50,7 +54,7 @@ class Pratica extends ConsumerWidget {
           animation: true,
           animationDuration: 300,
           center: Text(
-            formatDoubleToFractionToText(total!, ref.watch(porcentagem)),
+            formatDoubleToFractionToText(total, ref.watch(porcentagem)),
             style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           barRadius: const Radius.circular(16),
@@ -87,7 +91,7 @@ class Pratica extends ConsumerWidget {
                       child: Column(
                         children: [
                           Text(
-                            questoes![index].textoInicial,
+                            questoes[index].textoInicial,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 18),
                           ),
@@ -112,7 +116,7 @@ class Pratica extends ConsumerWidget {
               children: [
                 buildBottomWidget(
                     isAtividadeEmpty, ref, index, total, questoes),
-                buildAnswerWidget(ref, index, total),
+                buildAnswerWidget(ref, context, index, total, licao),
               ],
             ),
           ],
@@ -168,9 +172,17 @@ class Pratica extends ConsumerWidget {
     );
   }
 
-  Widget buildAnswerWidget(WidgetRef ref, int index, int total) {
+  Widget buildAnswerWidget(
+      WidgetRef ref, context, int index, int total, licao) {
     var isCorrect = ref.watch(isCorrectNotifier);
     var isAnswerVerified = ref.watch(isAnswerVerifiedNotifier);
+    ExtratoLicao extrato = ExtratoLicao(
+        idLicao: licao.id,
+        dataHora: getCurrentDateTimeUtc(),
+        pontuacaoTotal: ref.watch(scoreNotifier),
+        pontuacaoBonus: 0,
+        email: 'jon@gmail.com');
+
     return Visibility(
       visible: isAnswerVerified,
       child: SizedBox(
@@ -196,6 +208,11 @@ class Pratica extends ConsumerWidget {
                               ref
                                   .read(isAnswerVerifiedNotifier.notifier)
                                   .state = false
+                            }
+                          else
+                            {
+                              Navigator.pushNamed(context, '/resultado-licao',
+                                  arguments: extrato),
                             }
                         },
                     icon: const Icon(Icons.arrow_forward_rounded))
@@ -227,7 +244,8 @@ class Pratica extends ConsumerWidget {
     return const AtividadeAlternativa();
   }
 
-  verifyAnswer(WidgetRef ref, List<Questao> questoes, int index, int total) async {
+  verifyAnswer(
+      WidgetRef ref, List<Questao> questoes, int index, int total) async {
     setLoading(ref, true);
     if (questoes[index].tipo == TipoAtividade.perguntaResposta.name) {
       verifyAlternativa(ref, questoes, index);
@@ -254,7 +272,7 @@ class Pratica extends ConsumerWidget {
     setAnswerStates(ref, deepEq(sequencias, questaoMap));
   }
 
-  setAnswerStates(WidgetRef ref, bool isCorrect/* bool answerVerified, bool isCorrect*/) {
+  setAnswerStates(WidgetRef ref, bool isCorrect) {
     ref.read(isAnswerVerifiedNotifier.notifier).state = true;
     if (isCorrect) {
       ref.read(isCorrectNotifier.notifier).state = true;

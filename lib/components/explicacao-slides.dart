@@ -67,7 +67,7 @@ class ExplicacaoSlidesState extends State<ExplicacaoSlides> {
             Icons.check_rounded,
             () => {
               Navigator.pushNamed(context, '/pratica',
-                  arguments: widget.licao?.questoes),
+                  arguments: widget.licao),
             },
           ),
         if (explicacaoIndex < widget.licao!.explicacao.length - 1)

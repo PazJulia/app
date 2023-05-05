@@ -1,6 +1,7 @@
 import 'package:app/screens/formacao.dart';
 import 'package:app/screens/home.dart';
 import 'package:app/screens/pratica.dart';
+import 'package:app/screens/resultado-licao.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -36,6 +37,7 @@ class MyApp extends StatelessWidget {
           '/home': (context) => const Home(),
           '/formacao': (context) => const FormacaoCards(),
           '/pratica': (context) => const Pratica(),
+          '/resultado-licao': (context) => const ResultadoLicao(),
         });
   }
 }

@@ -27,12 +27,12 @@ class StarsRating extends StatelessWidget {
   Widget star(int i, int estrelas) {
     if (i < estrelas) {
       return const Icon(
-        Icons.star_rate_rounded,
+        Icons.star_rounded,
         color: Colors.amberAccent,
         size: 32,
         shadows: <Shadow>[Shadow(color: Colors.orange, blurRadius: 2)],
       );
     }
-    return const Icon(Icons.star_rate_rounded, color: Colors.white30, size: 32);
+    return const Icon(Icons.star_outline_rounded, color: Colors.black45, size: 32);
   }
 }

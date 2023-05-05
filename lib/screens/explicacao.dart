@@ -5,8 +5,6 @@ import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../components/stars-rating.dart';
-
 class Explicacao extends StatelessWidget {
   const Explicacao(int this.licaoId, String this.licaoNome, String this.cor, {super.key});
 
