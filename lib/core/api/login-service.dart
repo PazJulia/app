@@ -5,6 +5,7 @@ import 'package:app/shared/values/api-path.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../screens/login.dart';
 import '../domain/authorization.dart';
@@ -40,7 +41,15 @@ class LoginApi {
   Future<Widget> getHome() async {
     var prefs = await SharedPreferences.getInstance();
     if (prefs.getString("authorization") != null) {
-      return const Home();
+      String authorization = (prefs.getString("authorization") ?? "");
+      bool isValid = await isTokenValid(authorization);
+      if (isValid) {
+        return const Home();
+      } else {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+        return const Login();
+      }
     } else {
       return const Login();
     }
@@ -50,5 +59,13 @@ class LoginApi {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
     Navigator.pushNamedAndRemoveUntil(context, '/', (route) => false);
+  }
+
+  Future<bool> isTokenValid(String authorization) async {
+    /*var prefs = await SharedPreferences.getInstance();
+    String authorization = (prefs.getString("authorization") ?? "");*/
+    bool isExpired = JwtDecoder.isExpired(authorization);
+
+    return !isExpired;
   }
 }

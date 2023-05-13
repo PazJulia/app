@@ -180,8 +180,7 @@ class Pratica extends ConsumerWidget {
         idLicao: licao.id,
         dataHora: getCurrentDateTimeUtc(),
         pontuacaoTotal: ref.watch(scoreNotifier),
-        pontuacaoBonus: 0,
-        email: 'jon@gmail.com');
+        pontuacaoBonus: 0);
 
     return Visibility(
       visible: isAnswerVerified,

@@ -8,7 +8,7 @@ import 'package:app/core/api/api-service.dart';
 class ExtratoLicaoController extends ApiService {
   Future<ExtratoLicao> postExtratoLicao(ExtratoLicao extrato) async {
     Map<String, dynamic> requestBody = extrato.toJson();
-    http.Response response = await post('extratoslicao', requestBody);
+    http.Response response = await authorizedPost('extratoslicao', requestBody);
 
     if (response.statusCode == 201) {
       final Map<String, dynamic> data = json.decode(response.body);

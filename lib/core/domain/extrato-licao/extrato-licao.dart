@@ -5,7 +5,6 @@ class ExtratoLicao {
   String dataHora;
   int pontuacaoTotal;
   int pontuacaoBonus;
-  String? email;
   Estrela? estrela;
 
   ExtratoLicao({
@@ -13,7 +12,6 @@ class ExtratoLicao {
     required this.dataHora,
     required this.pontuacaoTotal,
     required this.pontuacaoBonus,
-    this.email,
     this.estrela
   });
 
@@ -23,7 +21,6 @@ class ExtratoLicao {
       dataHora: json['dataHora'] as String,
       pontuacaoTotal: json['pontuacaoTotal'] as int,
       pontuacaoBonus: json['pontuacaoBonus'] as int,
-      email: json['email'] as String? ?? json['email'],
       estrela: json['estrela'] != null ? Estrela.fromJson(json['estrela'] as Map<String, dynamic>) : null
     );
   }
@@ -34,7 +31,6 @@ class ExtratoLicao {
       'dataHora': dataHora,
       'pontuacaoTotal': pontuacaoTotal,
       'pontuacaoBonus': pontuacaoBonus,
-      'email': email,
       'estrela': estrela?.toJson()
     };
   }

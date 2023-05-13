@@ -3,7 +3,7 @@ import 'package:app/core/domain/modulo/modulos.dart';
 
 class ModulosController extends ApiService {
   Future<List<Modulos>> modulosList() async {
-    List response = await get('modulos/allByUsuario?email=jon%40gmail.com'); // pegar pelo token
+    List response = await authorizedGet('modulos/allByUsuario');
 
     var parse = response;
 
