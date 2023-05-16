@@ -1,5 +1,6 @@
 import 'package:app/core/domain/modulo/modulos-controller.dart';
 import 'package:app/core/domain/modulo/modulos.dart';
+import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 
 import '../components/lessons-timeline.dart';
@@ -55,22 +56,26 @@ class FormacaoCards extends StatelessWidget {
                         Container(
                           width: double.infinity,
                           alignment: Alignment.bottomLeft,
-                          color: Colors.black,
+                          color: secondaryColor,
                           child: Padding(
                             padding: const EdgeInsets.only(
-                                left: 20, top: 15, right: 20, bottom: 15),
+                                left: 25, top: 20, right: 25, bottom: 20),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   item.nome,
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                  style: TextStyle(
+                                      color: primaryColor,
+                                      fontSize: 16),
+                                ),
+                                const Divider(
+                                  color: Colors.transparent,
+                                  height: 10,
                                 ),
                                 Text(
                                   item.descricao,
-                                  style: const TextStyle(color: Colors.white),
+                                  style: TextStyle(color: primaryColor, fontWeight: FontWeight.w300, fontSize: 16),
                                 ),
                               ],
                             ),

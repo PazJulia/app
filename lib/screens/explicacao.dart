@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class Explicacao extends StatelessWidget {
-  const Explicacao(int this.licaoId, String this.licaoNome, String this.cor, {super.key});
+  const Explicacao(int this.licaoId, String this.licaoNome, String this.cor,
+      {super.key});
 
   final int licaoId;
   final String licaoNome;
@@ -25,14 +26,9 @@ class Explicacao extends StatelessWidget {
         elevation: 0,
         automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              licaoNome,
-              style: TextStyle(color: secondaryColor),
-            ),
-          ],
+        title: Text(
+          licaoNome,
+          style: TextStyle(color: secondaryColor),
         ),
         actions: [
           IconButton(
@@ -59,8 +55,7 @@ class Explicacao extends StatelessWidget {
             return Center(
               child: Text('Erro: ${snapshot.error}'),
             );
-          }
-          else {
+          } else {
             return ExplicacaoSlides(snapshot.data!, cor);
           }
         },

@@ -44,7 +44,7 @@ class ResultadoLicao extends StatelessWidget {
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children:[ StarsRating(estrela: snapshot.data?.estrela)],
+                      children:[ StarsRating(estrela: snapshot.data?.estrela, isDark: false)],
                     ),
                     Text(
                         'Você conquistou: ${snapshot.data?.pontuacaoTotal} XP!', style: const TextStyle(fontSize: 20),)

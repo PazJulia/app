@@ -27,13 +27,13 @@ class LessonsTimeline extends StatelessWidget {
                     children: [
                       Text(
                         licao.nome,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
-                          color: Colors.black,
+                          color: secondaryColor,
                         ),
                       ),
-                      StarsRating(estrela: licao.estrela),
+                      StarsRating(estrela: licao.estrela, isDark: true),
                     ],
                   ),
                 ),
@@ -55,10 +55,12 @@ class LessonsTimeline extends StatelessWidget {
                       },
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
-                        backgroundColor: secondaryColor,
+                        backgroundColor: primaryColor,
+                        fixedSize: const Size(50, 50),
+                        shadowColor: Colors.transparent,
                       ),
-                      child: Icon(Icons.not_started_rounded,
-                          color: primaryColor, size: 50),
+                      child: Icon(Icons.play_arrow_rounded,
+                          color: secondaryColor, size: 30),
                     ),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:app/components/user-detail.dart';
 import 'package:app/core/api/login-service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,6 +35,8 @@ class _HomeState extends State<Home> {
     });
   }
 
+  bool isDetailTapped = false;
+
   @override
   Widget build(BuildContext context) {
     LoginApi();
@@ -46,15 +49,30 @@ class _HomeState extends State<Home> {
         title: const Text('Teste', style: TextStyle(color: Colors.black)),
         actions: [
           IconButton(
-            iconSize: 30,
+            iconSize: 40,
             onPressed: () {
-              LoginApi.logout(context);
+              setState(() {
+                isDetailTapped = !isDetailTapped;
+              });
+
+              //userDetailDialog(context, 'Teste', 'Teste');
+              //LoginApi.logout(context);
             },
-            icon: const Icon(
-              Icons.logout,
+            icon: Icon(
+              Icons.account_circle,
+              color: secondaryColor,
             ),
           )
         ],
+        // hide/show this when isDetailTapped is true/false
+        bottom: isDetailTapped ? PreferredSize(
+          preferredSize: Size.fromHeight(160.0),
+          child: Container(
+            height: 160.0,
+            child: UserDetail(),
+          ),
+        ) : null,
+
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
             statusBarColor: Colors.white),
