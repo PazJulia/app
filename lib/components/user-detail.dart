@@ -20,27 +20,30 @@ class UserDetail extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Icon(
-                Icons.settings_outlined,
-                color: secondaryColor,
-                size: 30,
+              TextButton(
+                onPressed: () {
+                  LoginApi.logout(context);
+                },
+                child: const Text(
+                  'Sair',
+                  style:
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text(
+                  Text(
                     'Nome do usuário',
-                    style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    style: TextStyle(color: secondaryColor, fontWeight: FontWeight.bold),
                   ),
-                  TextButton(
-                    onPressed: () {
-                      LoginApi.logout(context);
-                    },
-                    child: const Text(
-                      'Sair',
-                      style: TextStyle(
-                          color: Colors.red, fontWeight: FontWeight.w900),
-                    ),
+                  Container(
+                    width: 10,
+                  ),
+                  Icon(
+                    Icons.settings,
+                    color: secondaryColor,
+                    size: 30,
                   ),
                 ],
               ),
@@ -57,7 +60,14 @@ class UserDetail extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: Column(
-                      children: const [Text("100 XP", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),), Text("Total de pontos")],
+                      children: const [
+                        Text(
+                          "100 XP",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 16),
+                        ),
+                        Text("Total de pontos")
+                      ],
                     ),
                   ),
                 ),
@@ -74,7 +84,14 @@ class UserDetail extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: Column(
-                      children: const [Text("100 XP", style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),), Text("Total de pontos")],
+                      children: const [
+                        Text(
+                          "100 XP",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w900, fontSize: 16),
+                        ),
+                        Text("Total de pontos")
+                      ],
                     ),
                   ),
                 ),

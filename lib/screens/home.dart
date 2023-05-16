@@ -3,6 +3,7 @@ import 'package:app/core/api/login-service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../components/assiduidade.dart';
 import '../shared/values/colors.dart';
 import 'formacao.dart';
 
@@ -46,7 +47,12 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         shadowColor: const Color.fromARGB(4, 0, 0, 0),
         automaticallyImplyLeading: false,
-        title: const Text('Teste', style: TextStyle(color: Colors.black)),
+        title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+          Text('Teste', style: TextStyle(color: Colors.black)),
+          Assiduidade()
+        ]),
         actions: [
           IconButton(
             iconSize: 40,
@@ -65,13 +71,15 @@ class _HomeState extends State<Home> {
           )
         ],
         // hide/show this when isDetailTapped is true/false
-        bottom: isDetailTapped ? PreferredSize(
-          preferredSize: Size.fromHeight(160.0),
-          child: Container(
-            height: 160.0,
-            child: UserDetail(),
-          ),
-        ) : null,
+        bottom: isDetailTapped
+            ? PreferredSize(
+                preferredSize: Size.fromHeight(160.0),
+                child: Container(
+                  height: 160.0,
+                  child: UserDetail(),
+                ),
+              )
+            : null,
 
         systemOverlayStyle: const SystemUiOverlayStyle(
             statusBarIconBrightness: Brightness.dark,
