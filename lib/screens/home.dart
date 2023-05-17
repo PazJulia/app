@@ -1,5 +1,8 @@
+import 'package:app/components/alert.dart';
 import 'package:app/components/user-detail.dart';
 import 'package:app/core/api/login-service.dart';
+import 'package:app/core/domain/matricula/matricula-controller.dart';
+import 'package:app/core/domain/matricula/matricula.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -15,6 +18,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  MatriculaController matriculaController = MatriculaController();
   int _selectedIndex = 0;
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
@@ -38,6 +42,25 @@ class _HomeState extends State<Home> {
 
   bool isDetailTapped = false;
 
+  Matricula? _matricula;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMatricula();
+  }
+
+  Future<void> fetchMatricula() async {
+    try {
+      final matricula = await matriculaController.getMatricula();
+      setState(() {
+        _matricula = matricula;
+      });
+    } catch (error) {
+      alert(context, 'Erro ao carregar Dados', error.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     LoginApi();
@@ -47,12 +70,18 @@ class _HomeState extends State<Home> {
         backgroundColor: Colors.white,
         shadowColor: const Color.fromARGB(4, 0, 0, 0),
         automaticallyImplyLeading: false,
-        title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-          Text('Teste', style: TextStyle(color: Colors.black)),
-          Assiduidade()
-        ]),
+        title: _matricula == null
+            ? Container()
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    _matricula!.linguagem.nome,
+                    style: const TextStyle(color: Colors.black),
+                  ),
+                  Assiduidade(_matricula!)
+                ],
+              ),
         actions: [
           IconButton(
             iconSize: 40,
@@ -73,10 +102,10 @@ class _HomeState extends State<Home> {
         // hide/show this when isDetailTapped is true/false
         bottom: isDetailTapped
             ? PreferredSize(
-                preferredSize: Size.fromHeight(160.0),
-                child: Container(
+                preferredSize: const Size.fromHeight(160.0),
+                child: SizedBox(
                   height: 160.0,
-                  child: UserDetail(),
+                  child: UserDetail(_matricula!),
                 ),
               )
             : null,

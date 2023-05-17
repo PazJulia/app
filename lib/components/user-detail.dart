@@ -1,9 +1,12 @@
 import 'package:app/core/api/login-service.dart';
+import 'package:app/core/domain/matricula/matricula.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 
 class UserDetail extends StatelessWidget {
-  const UserDetail({Key? key}) : super(key: key);
+  const UserDetail(this.matricula, {Key? key}) : super(key: key);
+
+  final Matricula matricula;
 
   @override
   Widget build(BuildContext context) {
@@ -27,22 +30,23 @@ class UserDetail extends StatelessWidget {
                 child: const Text(
                   'Sair',
                   style:
-                      TextStyle(color: Colors.red, fontWeight: FontWeight.w900),
+                      TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   Text(
-                    'Nome do usuário',
-                    style: TextStyle(color: secondaryColor, fontWeight: FontWeight.bold),
+                    matricula.usuario.nome,
+                    style: TextStyle(
+                        color: ninthColor, fontWeight: FontWeight.bold),
                   ),
                   Container(
                     width: 10,
                   ),
                   Icon(
                     Icons.settings,
-                    color: secondaryColor,
+                    color: ninthColor,
                     size: 30,
                   ),
                 ],
@@ -58,15 +62,24 @@ class UserDetail extends StatelessWidget {
                       color: fifthColor,
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    padding: const EdgeInsets.only(top: 20, bottom: 20),
-                    child: Column(
-                      children: const [
-                        Text(
-                          "100 XP",
-                          style: TextStyle(
-                              fontWeight: FontWeight.w900, fontSize: 16),
+                    padding: const EdgeInsets.all(20),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.emoji_events,
+                            size: 40, color: Colors.orangeAccent),
+                        // mudar de acordo com a liga atual
+                        Container(
+                          width: 10,
                         ),
-                        Text("Total de pontos")
+                        Flexible(
+                          child: Text(
+                            "Liga de alguma coisa",
+                            style: TextStyle(color: ninthColor),
+                            overflow: TextOverflow.ellipsis,
+                            // Set overflow behavior
+                            maxLines: 2, // Set maximum number of lines
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -84,13 +97,18 @@ class UserDetail extends StatelessWidget {
                     ),
                     padding: const EdgeInsets.only(top: 20, bottom: 20),
                     child: Column(
-                      children: const [
+                      children: [
                         Text(
-                          "100 XP",
+                          "${matricula.totalPontuacao} XP",
                           style: TextStyle(
-                              fontWeight: FontWeight.w900, fontSize: 16),
+                              fontWeight: FontWeight.w900,
+                              fontSize: 16,
+                              color: eighthColor),
                         ),
-                        Text("Total de pontos")
+                        Text(
+                          "Total de pontos",
+                          style: TextStyle(color: ninthColor),
+                        )
                       ],
                     ),
                   ),
