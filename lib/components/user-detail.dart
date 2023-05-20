@@ -1,5 +1,6 @@
 import 'package:app/core/api/login-service.dart';
 import 'package:app/core/domain/matricula/matricula.dart';
+import 'package:app/screens/usuario.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 
@@ -23,6 +24,31 @@ class UserDetail extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UsuarioWidget(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.settings,
+                      color: ninthColor,
+                      size: 30,
+                    ),
+                  ),
+                  Text(
+                    matricula.usuario.nome,
+                    style: TextStyle(
+                        color: ninthColor, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
               TextButton(
                 onPressed: () {
                   LoginApi.logout(context);
@@ -32,24 +58,6 @@ class UserDetail extends StatelessWidget {
                   style:
                       TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Text(
-                    matricula.usuario.nome,
-                    style: TextStyle(
-                        color: ninthColor, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    width: 10,
-                  ),
-                  Icon(
-                    Icons.settings,
-                    color: ninthColor,
-                    size: 30,
-                  ),
-                ],
               ),
             ],
           ),
@@ -76,8 +84,7 @@ class UserDetail extends StatelessWidget {
                             "Liga de alguma coisa",
                             style: TextStyle(color: ninthColor),
                             overflow: TextOverflow.ellipsis,
-                            // Set overflow behavior
-                            maxLines: 2, // Set maximum number of lines
+                            maxLines: 2,
                           ),
                         ),
                       ],

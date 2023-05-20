@@ -89,9 +89,6 @@ class _HomeState extends State<Home> {
               setState(() {
                 isDetailTapped = !isDetailTapped;
               });
-
-              //userDetailDialog(context, 'Teste', 'Teste');
-              //LoginApi.logout(context);
             },
             icon: Icon(
               Icons.account_circle,

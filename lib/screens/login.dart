@@ -24,7 +24,7 @@ class LoginState extends State<Login> {
     const String assetName = 'assets/logo.svg';
     final Widget logo = SvgPicture.asset(
       assetName,
-      semanticsLabel: 'Code Play Logo',
+      semanticsLabel: 'App Logo',
       width: 250,
     );
     return Scaffold(
@@ -134,7 +134,7 @@ class LoginState extends State<Login> {
     try {
       await LoginApi.login(emailController.text, passwordController.text)
           .then((authorization) {
-        Navigator.pushNamed(context, '/home');
+        Navigator.pushNamed(context, '/escolha-linguagem');
         formKey.currentState?.reset();
       }).catchError((error) {
         alert(context, "Ocorreu um erro", "$error");

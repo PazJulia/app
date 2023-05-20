@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:app/screens/escolha-linguagem.dart';
 import 'package:app/screens/home.dart';
 import 'package:app/shared/values/api-path.dart';
 import 'package:flutter/cupertino.dart';
@@ -30,21 +31,23 @@ class LoginApi {
       } else {
         return Future.error("Não foi possível obter o token de acesso");
       }
-    } else if ( response.statusCode == 500) {
+    } else if (response.statusCode == 500) {
       return Future.error("Erro interno do servidor");
     } else {
       return Future.error("Não foi possível realizar o login");
     }
-
   }
 
   Future<Widget> getHome() async {
     var prefs = await SharedPreferences.getInstance();
     if (prefs.getString("authorization") != null) {
       String authorization = (prefs.getString("authorization") ?? "");
+      int? linguagem = (prefs.getInt("language"));
       bool isValid = await isTokenValid(authorization);
-      if (isValid) {
+      if (isValid && linguagem != null) {
         return const Home();
+      } else if (linguagem == null) {
+        return const EscolhaLinguagem();
       } else {
         SharedPreferences prefs = await SharedPreferences.getInstance();
         await prefs.clear();
@@ -62,8 +65,6 @@ class LoginApi {
   }
 
   Future<bool> isTokenValid(String authorization) async {
-    /*var prefs = await SharedPreferences.getInstance();
-    String authorization = (prefs.getString("authorization") ?? "");*/
     bool isExpired = JwtDecoder.isExpired(authorization);
 
     return !isExpired;
