@@ -29,7 +29,7 @@ class Assiduidade extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
-        color: eighthColor,
+        color: fourthColor,
         borderRadius: BorderRadius.circular(10),
       ),
       child: Text(

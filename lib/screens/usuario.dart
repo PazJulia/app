@@ -5,6 +5,15 @@ import 'package:flutter/services.dart';
 class UsuarioWidget extends StatelessWidget {
   const UsuarioWidget({Key? key}) : super(key: key);
 
+  static TextStyle labelStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.bold,
+    color: secondaryColor,
+  );
+
+  static TextStyle userInfoStyle =
+      const TextStyle(fontSize: 16, fontWeight: FontWeight.w300);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,22 +48,74 @@ class UsuarioWidget extends StatelessWidget {
   }
 
   Widget usuario(context) {
-    return Center(
-      child: Padding(
+    return SingleChildScrollView(
+      child: Container(
         padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        width: double.infinity,
+        child: Row(
           children: [
-            Icon(
-              size: 100,
-              Icons.account_circle,
-              color: fourthColor,
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Icon(
+                      Icons.account_circle,
+                      size: 100,
+                      color: fourthColor,
+                    ),
+                  ),
+                  rowTextsButton(context, 'Nome', 'Nome do usuário', () {}),
+                  Container(
+                    height: 20,
+                  ),
+                  rowTextsButton(context, 'E-mail', 'E-mail do usuário', () {}),
+                  Container(
+                    height: 20,
+                  ),
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(10),
+                      backgroundColor: primaryColor,
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      'Alterar Minha Senha',
+                      style: labelStyle,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            Text('Nome'),
-            Text('Email'),
           ],
         ),
       ),
+    );
+  }
+
+  Widget rowTextsButton(context, label, info, onPressed) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Nome',
+          style: labelStyle,
+        ),
+        Row(
+          children: [
+            Text(
+              'Nome do usuário',
+              style: userInfoStyle,
+            ),
+            TextButton(
+              onPressed: () {
+                onPressed;
+              },
+              child: Icon(Icons.edit, color: fourthColor),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
