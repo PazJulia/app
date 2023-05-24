@@ -32,7 +32,7 @@ class UserDetail extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UsuarioWidget(),
+                          builder: (context) => UsuarioWidget(matricula.usuario),
                         ),
                       );
                     },

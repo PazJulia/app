@@ -18,8 +18,8 @@ class UsuarioController extends ApiService {
   }
 
   Future<Usuario> patchNome(String nome) async {
-    Map<String, dynamic> requestBody = {"nome": nome};
-    http.Response response = await patch('usuarios/editarNome', requestBody);
+    String url = '/usuarios/editarNome/$nome';
+    http.Response response = await patch(url);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -31,8 +31,8 @@ class UsuarioController extends ApiService {
   }
 
   Future<Usuario> patchEmail(String email) async {
-    Map<String, dynamic> requestBody = {"email": email};
-    http.Response response = await patch('usuarios/editarEmail', requestBody);
+    String url = '/usuarios/editarEmail/$email';
+    http.Response response = await patch(url);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
@@ -44,8 +44,8 @@ class UsuarioController extends ApiService {
   }
 
   Future<Usuario> patchSenha(String senha) async {
-    Map<String, dynamic> requestBody = {"senha": senha};
-    http.Response response = await patch('usuarios/editarSenha', requestBody);
+    String url = '/usuarios/editarSenha/$senha';
+    http.Response response = await patch(url);
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);

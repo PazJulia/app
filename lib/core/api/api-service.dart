@@ -73,7 +73,7 @@ class ApiService {
     return response;
   }
 
-  dynamic patch(String url, Map body,
+  dynamic patch(String url,
       [Map<String, String> params = const {}]) async {
     var prefs = await SharedPreferences.getInstance();
 
@@ -84,11 +84,8 @@ class ApiService {
       'Authorization': 'Bearer $authorization'
     };
 
-    var _body = json.encode(body);
-    print("json enviado : $_body");
-
     var response = await http.patch(Uri.parse(apiPath + url),
-        headers: headers, body: _body);
+        headers: headers);
     return response;
   }
 

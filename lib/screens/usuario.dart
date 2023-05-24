@@ -1,5 +1,8 @@
 import 'package:app/components/alert.dart';
+import 'package:app/components/message-display.dart';
+import 'package:app/core/api/login-service.dart';
 import 'package:app/core/domain/usuario/usuario-controller.dart';
+import 'package:app/core/domain/usuario/usuario.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,13 +10,15 @@ import 'package:flutter/services.dart';
 import '../components/form-field-text.dart';
 
 class UsuarioWidget extends StatefulWidget {
-  const UsuarioWidget({Key? key}) : super(key: key);
+  const UsuarioWidget(this.usuario, {Key? key}) : super(key: key);
+  final Usuario usuario;
 
   @override
   UsuarioState createState() => UsuarioState();
 }
 
 class UsuarioState extends State<UsuarioWidget> {
+  LoginApi loginApi = LoginApi();
   static TextStyle labelStyle = TextStyle(
     fontSize: 16,
     fontWeight: FontWeight.bold,
@@ -81,7 +86,7 @@ class UsuarioState extends State<UsuarioWidget> {
                     if (editUser)
                       form(userController, 'Nome', formKey, isName: true)
                     else
-                      rowTextsButton(context, 'Nome', 'Nome do usuário', () {
+                      rowTextsButton(context, 'Nome', widget.usuario.nome, () {
                         setState(() {
                           setFormState(true, false, formKey);
                         });
@@ -90,7 +95,7 @@ class UsuarioState extends State<UsuarioWidget> {
                     if (editEmail)
                       form(emailController, 'E-mail', formKey, isName: false)
                     else
-                      rowTextsButton(context, 'E-mail', 'E-mail do usuário',
+                      rowTextsButton(context, 'E-mail', widget.usuario.email,
                           () {
                         setState(() {
                           setFormState(false, true, formKey);
@@ -147,6 +152,7 @@ class UsuarioState extends State<UsuarioWidget> {
 
   onSave(bool isName, GlobalKey<FormState> formKey,
       TextEditingController controller) async {
+    LoginApi();
     bool? formOk = formKey.currentState?.validate();
     if (!formOk!) {
       return;
@@ -155,9 +161,27 @@ class UsuarioState extends State<UsuarioWidget> {
       isLoading = true;
     });
     if (isName) {
-      await usuarioController.patchNome(controller.text); // TODO: pegar o erro
+      await _patchValue(() => usuarioController.patchNome(controller.text));
     } else {
-      await usuarioController.patchEmail(controller.text); // TODO: pegar o erro
+      await _patchValue(() => usuarioController.patchEmail(controller.text));
+    }
+  }
+
+  Future<void> _patchValue(Function patchFunction) async {
+    try {
+      await patchFunction().then((user) {
+        LoginApi.logout(context);
+        MessageDisplay.show(
+            'Usuário atualizado com sucesso. Por favor, insira suas credenciais novamente', context,
+            color: eighthColor);
+      });
+    } catch (error) {
+      alert(context, "Ocorreu um erro", "$error");
+    } finally {
+      setState(() {
+        isLoading = false;
+        setFormState(false, false, formKey);
+      });
     }
   }
 
