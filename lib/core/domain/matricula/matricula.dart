@@ -1,4 +1,5 @@
 import 'package:app/core/domain/linguagem/linguagem.dart';
+import 'package:app/core/domain/usuario/usuario.dart';
 
 class Matricula {
   int id;
@@ -31,23 +32,6 @@ class Matricula {
       totalPontuacao: json['totalPontuacao'],
       linguagem: Linguagem.fromJson(json['linguagem']),
       usuario: Usuario.fromJson(json['usuario']),
-    );
-  }
-}
-
-class Usuario {
-  String nome;
-  String email;
-
-  Usuario({
-    required this.nome,
-    required this.email,
-  });
-
-  factory Usuario.fromJson(Map<String, dynamic> json) {
-    return Usuario(
-      nome: json['nome'],
-      email: json['email'],
     );
   }
 }

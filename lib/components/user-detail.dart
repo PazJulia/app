@@ -38,14 +38,14 @@ class UserDetail extends StatelessWidget {
                     },
                     child: Icon(
                       Icons.settings,
-                      color: ninthColor,
+                      color: secondaryColor,
                       size: 30,
                     ),
                   ),
                   Text(
                     matricula.usuario.nome,
                     style: TextStyle(
-                        color: ninthColor, fontWeight: FontWeight.bold),
+                        color: secondaryColor, fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
