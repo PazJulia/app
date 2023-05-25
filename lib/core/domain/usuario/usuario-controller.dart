@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app/core/api/api-service.dart';
 import 'package:app/core/domain/usuario/usuario.dart';
+import 'package:app/shared/functions/extract-error-message.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioController extends ApiService {
@@ -39,7 +40,8 @@ class UsuarioController extends ApiService {
       Usuario usuarioResponse = Usuario.fromJson(data);
       return usuarioResponse;
     } else {
-      return Future.error('Erro ao atualizar o e-mail');
+
+      return Future.error(extractErrorMessage(response.body));
     }
   }
 

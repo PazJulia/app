@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:app/shared/values/api-path.dart';
@@ -73,8 +72,7 @@ class ApiService {
     return response;
   }
 
-  dynamic patch(String url,
-      [Map<String, String> params = const {}]) async {
+  dynamic patch(String url, [Map<String, String> params = const {}]) async {
     var prefs = await SharedPreferences.getInstance();
 
     String authorization = (prefs.getString("authorization") ?? "");
@@ -84,14 +82,17 @@ class ApiService {
       'Authorization': 'Bearer $authorization'
     };
 
-    var response = await http.patch(Uri.parse(apiPath + url),
-        headers: headers);
+    var response = await http.patch(Uri.parse(apiPath + url), headers: headers);
     return response;
   }
 
   checkErrors(int statusCode, String url) {
     if (statusCode != 200) {
       switch (statusCode) {
+        case 401:
+          Exception("Não autorizado");
+          break;
+
         case 404:
           Exception("Não encontrado");
           break;
