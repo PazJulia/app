@@ -83,6 +83,9 @@ class ApiService {
     };
 
     var response = await http.patch(Uri.parse(apiPath + url), headers: headers);
+
+    checkErrors(response.statusCode, url);
+
     return response;
   }
 
@@ -95,6 +98,10 @@ class ApiService {
 
         case 404:
           Exception("Não encontrado");
+          break;
+
+        case 500:
+          Exception("Erro interno");
           break;
 
         default:
