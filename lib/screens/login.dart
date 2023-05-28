@@ -1,4 +1,5 @@
 import 'package:app/core/api/login-service.dart';
+import 'package:app/screens/criar-conta.dart';
 import 'package:app/shared/values/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -65,7 +66,7 @@ class LoginState extends State<Login> {
                       validator: (value) => passValidator(value!),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 70),
+                      padding: const EdgeInsets.only(top: 40),
                       child: SizedBox(
                         height: 60,
                         width: double.infinity,
@@ -94,6 +95,20 @@ class LoginState extends State<Login> {
                         ),
                       ),
                     ),
+                    Container(
+                      height: 20,
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => CriarConta(),
+                            ),
+                          );
+                        },
+                        child: Text('Criar conta',
+                            style: TextStyle(color: secondaryColor, fontSize: 16, fontWeight: FontWeight.bold))),
                   ],
                 ),
               ],

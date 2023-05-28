@@ -10,6 +10,7 @@ class Questao {
   String tipo;
   List<Alternativa>? alternativas;
   List<Sequencia>? sequencias;
+  List<Sequencia>? shuffledSequencias; // New property
 
   Questao({
     required this.id,
@@ -18,10 +19,17 @@ class Questao {
     required this.tipo,
     this.alternativas,
     this.sequencias,
+    this.shuffledSequencias, // Include the new property in the constructor
   });
 
   factory Questao.fromJson(Map<String, dynamic> json) {
     List<Object?>? result = mapQuestaoPorTipo(json);
+    List<Sequencia>? shuffledSequencias;
+    if (result?[1] != null) {
+      shuffledSequencias = List.from(result![1] as List<Sequencia>);
+      shuffledSequencias.shuffle(); // Shuffle the sequencias
+    }
+
     return Questao(
       id: json['id'],
       textoInicial: json['textoInicial'],
@@ -29,6 +37,7 @@ class Questao {
       tipo: json['tipo'],
       alternativas: result?[0] as List<Alternativa>?,
       sequencias: result?[1] as List<Sequencia>?,
+      shuffledSequencias: shuffledSequencias, // Assign the shuffled list to the new property
     );
   }
 

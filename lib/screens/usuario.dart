@@ -63,11 +63,11 @@ class UsuarioState extends State<UsuarioWidget> {
                 ))
           ]),
       backgroundColor: fifthColor,
-      body: usuario(context, formKey),
+      body: body(context, formKey),
     );
   }
 
-  Widget usuario(context, GlobalKey<FormState> formKey) {
+  Widget body(context, GlobalKey<FormState> formKey) {
     return SingleChildScrollView(
         child: Container(
             padding: const EdgeInsets.all(20),

@@ -132,7 +132,7 @@ class Pratica extends ConsumerWidget {
           questoes?[index].alternativas, ref);
     } else if (questoes?[index].tipo == TipoAtividade.programacao.name) {
       return initiateAtividadeEscolhaCodigoWidget(
-          questoes?[index].sequencias, ref);
+          questoes?[index].shuffledSequencias, ref);
     }
     return const SizedBox();
   }

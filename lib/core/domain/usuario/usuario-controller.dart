@@ -6,6 +6,20 @@ import 'package:app/shared/functions/extract-error-message.dart';
 import 'package:http/http.dart' as http;
 
 class UsuarioController extends ApiService {
+
+  Future<Usuario> create(Usuario usuario) async {
+    Map<String, dynamic> requestBody = usuario.toJson();
+    http.Response response = await post('usuarios', requestBody);
+
+    if (response.statusCode == 201) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      Usuario usuarioResponse = Usuario.fromJson(data);
+      return usuarioResponse;
+    } else {
+      return Future.error(extractErrorMessage(response.body));
+    }
+  }
+
   Future<Usuario> getLoggedUser() async {
     http.Response response = await authorizedGet('auth/usuario');
 
