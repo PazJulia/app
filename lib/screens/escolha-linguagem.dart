@@ -15,7 +15,7 @@ class EscolhaLinguagem extends StatelessWidget {
       backgroundColor: fifthColor,
       body: Center(
         child: FutureBuilder<List<Linguagem>>(
-          future: linguagemController.listLinguagens(),
+          future: linguagemController.listLinguagensByUsuario(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const CircularProgressIndicator();
