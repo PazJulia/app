@@ -8,7 +8,8 @@ import '../screens/explicacao.dart';
 import '../shared/values/colors.dart';
 
 class LessonsTimeline extends StatelessWidget {
-  const LessonsTimeline({Key? key, required this.licoes, required this.cor}) : super(key: key);
+  const LessonsTimeline({Key? key, required this.licoes, required this.cor})
+      : super(key: key);
 
   final List<Licoes> licoes;
   final String cor;
@@ -41,26 +42,30 @@ class LessonsTimeline extends StatelessWidget {
                   height: 100,
                   child: TimelineNode(
                     indicatorPosition: 1,
-                    startConnector: index + 1 == licoes.length ? null : SolidLineConnector(
-                      color: secondaryColor,
-                    ),
-                    indicator: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Explicacao(licao.id, licao.nome, cor),
+                    startConnector: index + 1 == licoes.length
+                        ? null
+                        : SolidLineConnector(
+                            color: secondaryColor,
                           ),
-                        );
-                      },
+                    indicator: ElevatedButton(
+                      onPressed: isLicaoBloqueada(licoes, index)
+                          ? null
+                          : () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      Explicacao(licao.id, licao.nome, cor),
+                                ),
+                              );
+                            },
                       style: ElevatedButton.styleFrom(
                         shape: const CircleBorder(),
                         backgroundColor: primaryColor,
                         fixedSize: const Size(50, 50),
                         shadowColor: Colors.transparent,
                       ),
-                      child: Icon(Icons.play_arrow_rounded,
-                          color: secondaryColor, size: 30),
+                      child: iconeLicao(licoes, index)
                     ),
                   ),
                 ),
@@ -78,5 +83,27 @@ class LessonsTimeline extends StatelessWidget {
         ...rows,
       ],
     );
+  }
+
+  Widget iconeLicao(List<Licoes> licoes, int indexAtual) {
+    bool licaoBloqueada = isLicaoBloqueada(licoes, indexAtual);
+
+    return Icon(
+        licaoBloqueada
+            ? Icons.lock_outlined
+            : Icons.play_arrow_rounded,
+        color: licaoBloqueada ? seventhColor : secondaryColor,
+        size: 30);
+  }
+
+  bool isLicaoBloqueada(List<Licoes> licoes, int indexAtual) {
+    Licoes licaoAtual = licoes[indexAtual];
+    Licoes? licaoAnterior = indexAtual == 0 ? null : licoes[indexAtual - 1];
+
+    if (indexAtual == 0) {
+      return false;
+    }
+
+    return !licaoAtual.licaoIniciada && (licaoAnterior?.estrela?.quantidade ?? 0) < 2;
   }
 }

@@ -11,7 +11,7 @@ class MatriculaController extends ApiService {
     var prefs = await SharedPreferences.getInstance();
     int? linguagemId = (prefs.getInt("language"));
 
-    Map<String, dynamic> response = await authorizedGet('matriculas/getByToken/$encodedDataHora/$linguagemId');
+    Map<String, dynamic> response = await authorizedGet('matriculas/getByUsuarioLogado/$encodedDataHora/$linguagemId');
 
     return Matricula.fromJson(response);
   }
