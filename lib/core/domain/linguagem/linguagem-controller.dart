@@ -9,7 +9,7 @@ class LinguagemController extends ApiService {
   }
 
   Future<List<Linguagem>> listLinguagensByUsuario() async {
-    List response = await authorizedGet('linguagens/allByUsuarioLogado');
+    List response = await authorizedGet('linguagens/allMatriculasUsuarioLogado');
     List<Linguagem> linguagens = response.map((json) => Linguagem.fromJson(json)).toList();
     return linguagens;
   }

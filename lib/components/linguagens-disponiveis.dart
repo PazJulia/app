@@ -69,7 +69,7 @@ class LinguagensDisponiveis extends StatelessWidget {
           child: Container(
             width: 100,
             height: 100,
-            child: Center(
+            child: const Center(
               child: CircularProgressIndicator(),
             ),
           ),
