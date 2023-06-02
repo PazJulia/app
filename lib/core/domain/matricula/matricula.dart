@@ -25,11 +25,11 @@ class Matricula {
   factory Matricula.fromJson(Map<String, dynamic> json) {
     return Matricula(
       id: json['id'],
-      data: json['data'],
-      assiduidade: json['assiduidade'],
-      assiduidadeSemanal: json['assiduidadeSemanal'],
-      assiduidadeMensal: json['assiduidadeMensal'],
-      totalPontuacao: json['totalPontuacao'],
+      data: json['data'] ?? '',
+      assiduidade: json['assiduidade'] ?? 0,
+      assiduidadeSemanal: json['assiduidadeSemanal'] ?? 0,
+      assiduidadeMensal: json['assiduidadeMensal'] ?? 0,
+      totalPontuacao: json['totalPontuacao'] ?? 0,
       linguagem: Linguagem.fromJson(json['linguagem']),
       usuario: Usuario.fromJson(json['usuario']),
     );

@@ -9,8 +9,8 @@ class Linguagem {
 
   factory Linguagem.fromJson(Map<String, dynamic> json) {
     return Linguagem(
-      id: json['id'] as int,
-      nome: json['nome'] as String,
+      id: json['id'] ?? 0,
+      nome: json['nome'] ?? '',
     );
   }
 

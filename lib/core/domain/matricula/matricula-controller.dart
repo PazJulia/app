@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:app/core/api/api-service.dart';
 import 'package:app/core/domain/matricula/matricula.dart';
+import 'package:app/shared/values/api-path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../shared/functions/get-current-date-time-utc.dart';
 
@@ -15,4 +19,25 @@ class MatriculaController extends ApiService {
 
     return Matricula.fromJson(response);
   }
+
+  Future<Matricula> createMatricula(int linguagemId) async {
+    var prefs = await SharedPreferences.getInstance();
+
+    String? authorization = prefs.getString("authorization");
+    final headers = {
+      'accept': '*/*',
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $authorization'
+    };
+
+    final response = await http.post(
+      Uri.parse('${apiPath}matriculas/$linguagemId'),
+      headers: headers,
+    );
+
+    Map<String, dynamic> responseData = jsonDecode(response.body);
+    return Matricula.fromJson(responseData);
+  }
+
+
 }
