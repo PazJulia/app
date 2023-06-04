@@ -6,16 +6,12 @@ import 'package:app/shared/values/api-path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-import '../../../shared/functions/get-current-date-time-utc.dart';
-
 class MatriculaController extends ApiService {
   Future<Matricula> getMatricula() async {
-    String dataHora = getCurrentDateTimeUtc();
-    String encodedDataHora = Uri.encodeComponent(dataHora);
     var prefs = await SharedPreferences.getInstance();
     int? linguagemId = (prefs.getInt("language"));
 
-    Map<String, dynamic> response = await authorizedGet('matriculas/getByUsuarioLogado/$encodedDataHora/$linguagemId');
+    Map<String, dynamic> response = await authorizedGet('matriculas/usuarioLogado/$linguagemId');
 
     return Matricula.fromJson(response);
   }
