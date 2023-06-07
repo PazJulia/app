@@ -10,6 +10,7 @@ class Matricula {
   int totalPontuacao;
   Linguagem linguagem;
   Usuario usuario;
+  String? ranking;
 
   Matricula({
     required this.id,
@@ -20,6 +21,7 @@ class Matricula {
     required this.totalPontuacao,
     required this.linguagem,
     required this.usuario,
+    this.ranking,
   });
 
   factory Matricula.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Matricula {
       totalPontuacao: json['totalPontuacao'] ?? 0,
       linguagem: Linguagem.fromJson(json['linguagem']),
       usuario: Usuario.fromJson(json['usuario']),
+      ranking: json['ranking'] ?? '',
     );
   }
 }

@@ -74,7 +74,7 @@ class RankingUsuario extends StatelessWidget {
                             ),
                             const SizedBox(width: 20),
                             Text(
-                              'DIVISÃO ${ranking[0].ranking}',
+                              'DIVISÃO DE ${ranking[0].ranking}',
                               style:
                                   TextStyle(color: primaryColor, fontSize: 16),
                             ),
