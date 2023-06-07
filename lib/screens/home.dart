@@ -1,4 +1,5 @@
 import 'package:app/components/alert.dart';
+import 'package:app/components/ranking-usuario.dart';
 import 'package:app/components/user-detail.dart';
 import 'package:app/core/api/login-service.dart';
 import 'package:app/core/domain/matricula/matricula-controller.dart';
@@ -28,10 +29,7 @@ class _HomeState extends State<Home> {
       style: optionStyle,
     ),*/
     FormacaoCards(),
-    Text(
-      'Divisão',
-      style: optionStyle,
-    ),
+    RankingUsuario(),
   ];
 
   void _onItemTapped(int index) {
