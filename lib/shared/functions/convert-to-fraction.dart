@@ -3,6 +3,8 @@ String formatDoubleToFractionToText(int total, double percent) {
 
   num fractionNumerator = (total * percent) / 100;
 
+  // round to the nearest integer
+  fractionNumerator = fractionNumerator.round();
   return '${(fractionNumerator.toInt())} / $total';
 }
 

@@ -42,8 +42,9 @@ class Pratica extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.dark,
-            statusBarColor: fifthColor),
+          statusBarIconBrightness: Brightness.dark,
+          statusBarColor: fifthColor,
+        ),
         toolbarHeight: 80,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -81,35 +82,31 @@ class Pratica extends ConsumerWidget {
         child: Column(
           children: [
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    top: 20, right: 5, bottom: 20, left: 5),
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: Column(
-                        children: [
-                          Text(
-                            questoes[index].textoInicial,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 18),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            questoes[index].pergunta,
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(
-                                fontSize: 18, fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      ),
+              child: ListView(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(5),
+                    child: Column(
+                      children: [
+                        Text(
+                          questoes[index].textoInicial,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          questoes[index].pergunta,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
-                    buildAtividadeWidget(questoes, index, ref),
-                  ],
-                ),
+                  ),
+                  buildAtividadeWidget(questoes, index, ref),
+                ],
               ),
             ),
             Stack(
