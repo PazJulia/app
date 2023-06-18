@@ -22,58 +22,55 @@ class AtividadeAlternativa extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final alternativas = ref.watch(alternativa);
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
-        child: Column(
-          children: [
-            for (int i = 0; i < alternativas.length; i++)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: FittedBox(
-                  child: SizedBox(
-                    height: 50,
-                    width: 300,
-                    child: ElevatedButton(
-                      onPressed: ref.watch(isAnswerVerifiedNotifier)
-                          ? null
-                          : () {
-                              ref
-                                  .read(isAtividadeEmptyNotifier.notifier)
-                                  .state = false;
-                              Future.delayed(const Duration(milliseconds: 30),
-                                  () {
-                                ref
-                                    .read(alternativa.notifier)
-                                    .resetEstadosAndSetEstadoIndex(i,
-                                        estado: true, allEstados: false);
-                              });
-                            },
-                      style: ButtonStyle(
-                        backgroundColor: hasValidAlternativaAtIndex(
-                                    alternativas, i) &&
+    return Container(
+      padding: const EdgeInsets.only(top: 30, right: 20, bottom: 5, left: 20),
+      child: Column(
+        children: [
+          for (int i = 0; i < alternativas.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: SizedBox(
+                // Adiciona SizedBox ao redor do ElevatedButton
+                width: double.infinity, // Define largura infinita
+                child: ElevatedButton(
+                  onPressed: ref.watch(isAnswerVerifiedNotifier)
+                      ? null
+                      : () {
+                          ref.read(isAtividadeEmptyNotifier.notifier).state =
+                              false;
+                          Future.delayed(const Duration(milliseconds: 30), () {
+                            ref
+                                .read(alternativa.notifier)
+                                .resetEstadosAndSetEstadoIndex(i,
+                                    estado: true, allEstados: false);
+                          });
+                        },
+                  style: ButtonStyle(
+                    backgroundColor:
+                        hasValidAlternativaAtIndex(alternativas, i) &&
                                 alternativas[i].estado
                             ? MaterialStateProperty.all<Color>(secondaryColor)
                             : MaterialStateProperty.all<Color>(primaryColor),
-                      ),
-                      child: Text(
-                        hasValidAlternativaAtIndex(alternativas, i)
-                            ? (alternativas[i].itemAtividade as Alternativa)
-                                .descricao
-                            : '',
-                        style: TextStyle(
-                            color:
-                                hasValidAlternativaAtIndex(alternativas, i) &&
-                                        alternativas[i].estado
-                                    ? primaryColor
-                                    : secondaryColor),
-                      ),
+                  ),
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.only(top: 15, bottom: 15),
+                    child: Text(
+                      hasValidAlternativaAtIndex(alternativas, i)
+                          ? (alternativas[i].itemAtividade as Alternativa)
+                              .descricao
+                          : '',
+                      style: TextStyle(
+                          color: hasValidAlternativaAtIndex(alternativas, i) &&
+                                  alternativas[i].estado
+                              ? primaryColor
+                              : secondaryColor),
                     ),
                   ),
                 ),
               ),
-          ],
-        ),
+            ),
+        ],
       ),
     );
   }

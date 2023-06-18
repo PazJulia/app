@@ -42,9 +42,8 @@ class Pratica extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(
         systemOverlayStyle: SystemUiOverlayStyle(
-          statusBarIconBrightness: Brightness.dark,
-          statusBarColor: fifthColor,
-        ),
+            statusBarIconBrightness: Brightness.dark,
+            statusBarColor: fifthColor),
         toolbarHeight: 80,
         elevation: 0,
         automaticallyImplyLeading: false,
@@ -82,30 +81,41 @@ class Pratica extends ConsumerWidget {
         child: Column(
           children: [
             Expanded(
-              child: ListView(
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(5),
+              child: CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Column(
                       children: [
-                        Text(
-                          questoes[index].textoInicial,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontSize: 18),
+                        SingleChildScrollView(
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            child: Column(
+                              children: [
+                                questoes[index].textoInicial != '' ? Text(
+                                  questoes[index].textoInicial,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(fontSize: 18),
+                                ) : Container(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                questoes[index].pergunta != '' ? Text(
+                                  questoes[index].pergunta,
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ) : Container(),
+                              ],
+                            ),
+                          ),
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          questoes[index].pergunta,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
+                        buildAtividadeWidget(questoes, index, ref),
                       ],
                     ),
                   ),
-                  buildAtividadeWidget(questoes, index, ref),
                 ],
               ),
             ),
