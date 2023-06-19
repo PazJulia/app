@@ -2,17 +2,19 @@ import '../estrela/estrela.dart';
 
 class ExtratoLicao {
   int idLicao;
-  String dataHora;
-  int pontuacaoTotal;
-  int pontuacaoBonus;
+  String? dataHora;
+  int? pontuacaoTotal;
+  int? pontuacaoBonus;
   Estrela? estrela;
+  List<int>? questoesCorretasIds;
 
   ExtratoLicao({
     required this.idLicao,
-    required this.dataHora,
-    required this.pontuacaoTotal,
-    required this.pontuacaoBonus,
-    this.estrela
+    this.dataHora,
+    this.pontuacaoTotal,
+    this.pontuacaoBonus,
+    this.estrela,
+    this.questoesCorretasIds
   });
 
   factory ExtratoLicao.fromJson(Map<String, dynamic> json) {
@@ -28,10 +30,7 @@ class ExtratoLicao {
   Map<String, dynamic> toJson() {
     return {
       'idLicao': idLicao,
-      'dataHora': dataHora,
-      'pontuacaoTotal': pontuacaoTotal,
-      'pontuacaoBonus': pontuacaoBonus,
-      'estrela': estrela?.toJson()
+      'questoesCorretasIds': questoesCorretasIds
     };
   }
 }

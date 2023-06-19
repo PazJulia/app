@@ -13,7 +13,6 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter/services.dart';
 
 import '../core/domain/licao/sequencia.dart';
-import '../shared/functions/get-current-date-time-utc.dart';
 import '../shared/values/colors.dart';
 
 final porcentagem = StateProvider.autoDispose<double>((ref) => 0.0);
@@ -23,7 +22,7 @@ final indexNotifier = StateProvider.autoDispose((ref) => 0);
 final isLoadingNotifier = StateProvider.autoDispose((ref) => false);
 final isCorrectNotifier = StateProvider.autoDispose((ref) => false);
 final isAnswerVerifiedNotifier = StateProvider.autoDispose((ref) => false);
-final scoreNotifier = StateProvider.autoDispose((ref) => 0);
+final questoesCorretasIds = StateProvider.autoDispose<List<int>>((ref) => <int>[]);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
@@ -184,10 +183,8 @@ class Pratica extends ConsumerWidget {
     var isCorrect = ref.watch(isCorrectNotifier);
     var isAnswerVerified = ref.watch(isAnswerVerifiedNotifier);
     ExtratoLicao extrato = ExtratoLicao(
-        idLicao: licao.id,
-        dataHora: getCurrentDateTimeUtc(),
-        pontuacaoTotal: ref.watch(scoreNotifier),
-        pontuacaoBonus: 0);
+      idLicao: licao.id,
+      questoesCorretasIds: ref.watch(questoesCorretasIds));
 
     return Visibility(
       visible: isAnswerVerified,
@@ -268,28 +265,30 @@ class Pratica extends ConsumerWidget {
     final alternativas = ref.watch(alternativa);
     final selected =
         alternativas.firstWhere((element) => element.estado == true);
-    setAnswerStates(ref, selected.itemAtividade.verdadeira);
+    setAnswerStates(ref, selected.itemAtividade.verdadeira, questoes, index);
   }
 
   verifySequencia(WidgetRef ref, questoes, int index) {
     final sequencias = ref.watch(respostaCodigo);
     final questaoMap = questoes[index].sequencias.map((e) => e.nome).toList();
     Function deepEq = const DeepCollectionEquality().equals;
-    setAnswerStates(ref, deepEq(sequencias, questaoMap));
+    setAnswerStates(ref, deepEq(sequencias, questaoMap), questoes, index);
   }
 
-  setAnswerStates(WidgetRef ref, bool isCorrect) {
+  setAnswerStates(WidgetRef ref, bool isCorrect, questoes, index) {
     ref.read(isAnswerVerifiedNotifier.notifier).state = true;
     if (isCorrect) {
       ref.read(isCorrectNotifier.notifier).state = true;
-      incrementScore(ref);
+      addQuestoesCorretasIds(ref, questoes, index);
     } else {
       ref.read(isCorrectNotifier.notifier).state = false;
     }
   }
 
-  incrementScore(WidgetRef ref) {
-    ref.read(scoreNotifier.notifier).state = ref.watch(scoreNotifier) + 1;
+  addQuestoesCorretasIds(WidgetRef ref, questoes, index) {
+    List<int> ids = ref.watch(questoesCorretasIds);
+    ids.add(questoes[index].id);
+    ref.read(questoesCorretasIds.notifier).state = ids;
   }
 
   setLoading(WidgetRef ref, bool isLoading) {
