@@ -32,7 +32,7 @@ class StarsRating extends StatelessWidget {
         Icons.star_rounded,
         color: Colors.amberAccent,
         size: 32,
-        shadows: <Shadow>[Shadow(color: Colors.orange, blurRadius: 2)],
+        shadows: <Shadow>[Shadow(color: Colors.deepOrangeAccent, blurRadius: 4)],
       );
     }
     // return const Icon(Icons.star_outline_rounded, color: Colors.black26, size: 32);
