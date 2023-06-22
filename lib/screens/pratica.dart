@@ -11,8 +11,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:flutter/services.dart';
+import 'package:selectable_code_view/selectable_code_view.dart';
+import 'package:selectable_code_view/sourceCodes/code_view_screen.dart';
 
 import '../core/domain/licao/sequencia.dart';
+import '../shared/functions/retornar-explicacao-texto-codigo-formatada.dart';
 import '../shared/values/colors.dart';
 
 final porcentagem = StateProvider.autoDispose<double>((ref) => 0.0);
@@ -22,7 +25,8 @@ final indexNotifier = StateProvider.autoDispose((ref) => 0);
 final isLoadingNotifier = StateProvider.autoDispose((ref) => false);
 final isCorrectNotifier = StateProvider.autoDispose((ref) => false);
 final isAnswerVerifiedNotifier = StateProvider.autoDispose((ref) => false);
-final questoesCorretasIds = StateProvider.autoDispose<List<int>>((ref) => <int>[]);
+final questoesCorretasIds =
+    StateProvider.autoDispose<List<int>>((ref) => <int>[]);
 
 class Pratica extends ConsumerWidget {
   const Pratica({super.key});
@@ -91,22 +95,20 @@ class Pratica extends ConsumerWidget {
                             padding: const EdgeInsets.all(5),
                             child: Column(
                               children: [
-                                questoes[index].textoInicial != '' ? Text(
-                                  questoes[index].textoInicial,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(fontSize: 18),
-                                ) : Container(),
+                                questoes[index].textoInicial != ''
+                                    ? Text(
+                                        questoes[index].textoInicial,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(fontSize: 18),
+                                      )
+                                    : Container(),
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                questoes[index].pergunta != '' ? Text(
-                                  questoes[index].pergunta,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ) : Container(),
+                                questoes[index].pergunta != ''
+                                    ? continuacaoEnunciado(
+                                        questoes[index].pergunta)
+                                    : Container(),
                               ],
                             ),
                           ),
@@ -129,6 +131,31 @@ class Pratica extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  Widget continuacaoEnunciado(String pergunta) {
+    var texto = retornarExplicacaoTextoCodigoFormatada(pergunta);
+    bool isCode = texto.first['isCode'];
+    if (isCode) {
+      return SelectableCodeView(
+        code: texto.first['texto'],
+        language: Language.JAVA,
+        languageTheme: LanguageTheme.gravityDark(),
+        fontSize: 14,
+        withZoom: false,
+        withLinesCount: false,
+        expanded: false,
+      );
+    } else {
+      return Text(
+        pergunta,
+        textAlign: TextAlign.center,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
   }
 
   Widget buildAtividadeWidget(
@@ -183,8 +210,7 @@ class Pratica extends ConsumerWidget {
     var isCorrect = ref.watch(isCorrectNotifier);
     var isAnswerVerified = ref.watch(isAnswerVerifiedNotifier);
     ExtratoLicao extrato = ExtratoLicao(
-      idLicao: licao.id,
-      questoesCorretasIds: ref.watch(questoesCorretasIds));
+        idLicao: licao.id, questoesCorretasIds: ref.watch(questoesCorretasIds));
 
     return Visibility(
       visible: isAnswerVerified,
