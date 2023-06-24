@@ -49,7 +49,7 @@ class MatriculaController extends ApiService {
 
     var response = await http.get(
         Uri.parse('${apiPath}matriculas/rankingUsuarioLogado/$linguagemId'),
-        headers: headers); //http.get(Uri.parse(url));
+        headers: headers);
 
     if (response.statusCode == 204) {
       return [];
