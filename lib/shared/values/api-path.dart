@@ -1,1 +1,1 @@
-const String apiPath = 'http://10.0.0.106:8080/';
+const String apiPath = 'https://wstcc-1-rocha-julia75-dev.apps.sandbox-m3.1530.p1.openshiftapps.com/';
